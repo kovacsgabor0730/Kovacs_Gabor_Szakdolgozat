@@ -23,8 +23,8 @@ def generate_can():
     return ' '.join(random.choices(string.digits, k=6))
 
 
-font_path_normal = r"C:\Windows\Fonts\times.ttf"  # Normál betűtípus
-font_path_bold = r"C:\Windows\Fonts\timesbd.ttf"  # Félkövér betűtípus
+font_path_normal = "./data/fonts/Nexa Bold.otf"  # Normál betűtípus
+font_path_bold = "./data/fonts/VanillaExtractRegular.ttf"  # Félkövér betűtípus
 font_size = 21
 font_normal = ImageFont.truetype(font_path_normal, font_size)
 font_bold = ImageFont.truetype(font_path_bold, font_size)
@@ -46,7 +46,22 @@ nf_position = (300, 160)  # A N/F szöveg koordinátái
 for person in file:
     if i == 10:
         break
-    id_card = Image.open('./data/eszemelyi-front.jpg')
+    id_card = Image.open('./data/eszemelyi-front_photoshoped.png')
+
+    # Átméretezés
+    id_card = id_card.resize((600, 378))
+
+    # Ha a kép RGBA módban van, konvertáljuk RGB-re, hogy elkerüljük a JPEG mentési hibát
+    if id_card.mode == 'RGBA':
+        id_card = id_card.convert('RGB')
+
+    # Mentés JPEG formátumban
+    id_card.save('./data/eszemelyi-front_photoshoped.jpg')
+
+    # JPEG kép újbóli megnyitása
+    id_card = Image.open('./data/eszemelyi-front_photoshoped.jpg')
+
+    # Új fotó betöltése
     new_photo = Image.open('./data/new_photo.jpg')
 
     new_photo_resized = new_photo.resize((190, 270))
@@ -68,20 +83,20 @@ for person in file:
     # N/F szöveg formázása
     gender = person[2].strip()
     if gender == "F":
-        draw.text(nf_position, "N/", font=font_bold, fill="black")
-        draw.text((nf_position[0] + 30, nf_position[1]), "F", font=font_normal, fill="black")
+        draw.text(nf_position, "N/", font=font_bold, fill="#787372")
+        draw.text((nf_position[0] + 30, nf_position[1]), "F", font=font_normal, fill="#787372")
     else:
-        draw.text(nf_position, "N/", font=font_normal, fill="black")
-        draw.text((nf_position[0] + 30, nf_position[1]), "F", font=font_bold, fill="black")
+        draw.text(nf_position, "N/", font=font_normal, fill="#787372")
+        draw.text((nf_position[0] + 30, nf_position[1]), "F", font=font_bold, fill="#787372")
 
     # Szöveg hozzáadása a képhez
-    draw.text(name_position, name, font=font_normal, fill="black")
-    draw.text(doc_no_position, doc_no, font=font_normal, fill="black")
-    draw.text(birthday_position, birthday_str, font=font_normal, fill="black")
-    draw.text(expiry_position, expiry_str, font=font_normal, fill="black")
+    draw.text(name_position, name, font=font_normal, fill="#787372")
+    draw.text(doc_no_position, doc_no, font=font_normal, fill="#787372")
+    draw.text(birthday_position, birthday_str, font=font_normal, fill="#787372")
+    draw.text(expiry_position, expiry_str, font=font_normal, fill="#787372")
 
     # CAN szöveg hozzáadása nagyobb betűmérettel
-    draw.text(can_position, generate_can(), font=font_can, fill="black")
+    draw.text(can_position, generate_can(), font=font_can, fill="#787372")
 
     output_path = f'./data/Generated_cards/eszemelyi_with_{person[1]}_{person[0]}.jpg'
     id_card.save(output_path)
