@@ -20,8 +20,13 @@ const connectDB = async () => {
         return client.db(process.env.DB_NAME);
     } catch (error) {
         console.error('MongoDB connection error:', error);
-        process.exit(1); // Kilép a folyamattal, ha az adatbázis nem kapcsolódik
+        process.exit(1);
     }
 };
 
-module.exports = connectDB;
+const getCollection = async (collectionName) => {
+    const db = await connectDB();
+    return db.collection(collectionName);
+};
+
+module.exports = { connectDB, getCollection };
