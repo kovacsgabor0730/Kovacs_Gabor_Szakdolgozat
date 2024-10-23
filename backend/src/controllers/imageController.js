@@ -10,18 +10,18 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-    storage,
-    limits: { fileSize: 1024 * 1024 * 5 }, // 5 MB limit fájlonként
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 5 },
     fileFilter: (req, file, cb) => {
         if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
             cb(null, true);
         } else {
-            cb(new Error('Only .png, .jpg and .jpeg format allowed!'), false);
+            cb(new Error('Only .png, .jpg, and .jpeg format allowed!'), false);
         }
     }
-}).array('images', 2); // Két kép várása
+}).array('images', 2); 
 
-exports.uploadImages = (req, res) => {
+exports.uploadImages = async (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             return res.status(400).json({ message: err.message });

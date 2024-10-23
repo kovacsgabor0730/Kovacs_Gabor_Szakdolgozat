@@ -1,17 +1,21 @@
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
 
-// Jelszó hash-elése
 const hashPassword = async (password) => {
     return await bcrypt.hash(password, SALT_ROUNDS);
 };
 
-// Jelszó ellenőrzése
 const comparePassword = async (password, hashedPassword) => {
     return await bcrypt.compare(password, hashedPassword);
 };
 
+const isPasswordStrong = (password) => {
+    const validatePasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
+    return validatePasswordRegex.test(password);
+};
+
 module.exports = {
     hashPassword,
-    comparePassword
+    comparePassword,
+    isPasswordStrong
 };
