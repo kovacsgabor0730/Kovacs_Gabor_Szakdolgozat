@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const idCardController = require('../controllers/idCardController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
+const protect = require('../middlewares/authMiddleware');
 
-router.post('/api/id-card/upload', authenticateToken, idCardController.uploadIdCardData);
+router.post('/api/id-card/upload', protect, idCardController.uploadIdCardData);
 
 module.exports = router;

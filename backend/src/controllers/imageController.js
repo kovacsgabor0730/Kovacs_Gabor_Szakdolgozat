@@ -21,7 +21,7 @@ const upload = multer({
     }
 }).array('images', 2); 
 
-exports.uploadImages = async (req, res) => {
+const uploadImages = async (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             return res.status(400).json({ message: err.message });
@@ -38,3 +38,7 @@ exports.uploadImages = async (req, res) => {
         console.log(req.files);
     });
 };
+
+module.exports={
+    uploadImages
+}

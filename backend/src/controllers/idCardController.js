@@ -1,4 +1,4 @@
-const { getCollection } = require('../utils/dbUtil');
+const { getCollection } = require('../config/db');
 const { verifyToken } = require('../utils/tokenUtil');
 const { ObjectId } = require('mongodb');
 const fs = require('fs');
