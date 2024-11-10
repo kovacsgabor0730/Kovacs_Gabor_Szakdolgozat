@@ -5,12 +5,12 @@ from torchvision import transforms
 from model import FieldOCRNetwork
 from dataset import create_dataset, collate_fn
 
-
 def train_model(model, train_loader, criterion, optimizer, scheduler, num_epochs=10):
     """
     Training loop for the OCR model
     """
     model.train()
+
     for epoch in range(num_epochs):
         running_loss = 0.0
 
@@ -18,14 +18,20 @@ def train_model(model, train_loader, criterion, optimizer, scheduler, num_epochs
             optimizer.zero_grad()
 
             # Forward pass
-            outputs = model(images)
+            outputs = model(images)  # [batch_size, T, num_classes]
+            outputs = outputs.permute(1, 0, 2)  # [T, batch_size, num_classes]
 
-            # Prepare data for CTC loss
-            input_lengths = torch.full(size=(outputs.size(0),), fill_value=outputs.size(1), dtype=torch.long)
+            # Input lengths: set to the sequence length `T` of the LSTM output for each batch element
+            batch_size = outputs.size(1)
+            input_lengths = torch.full(size=(batch_size,), fill_value=outputs.size(0), dtype=torch.long)
+
+            # Target lengths: calculate length of each label sequence in the batch
             target_lengths = torch.tensor([len(label[label != 0]) for label in labels], dtype=torch.long)
 
             # Calculate loss
-            loss = criterion(outputs.log_softmax(2), labels, input_lengths, target_lengths)
+            loss = criterion(outputs, labels, input_lengths, target_lengths)
+
+            # Backward pass
             loss.backward()
             optimizer.step()
 
@@ -36,10 +42,6 @@ def train_model(model, train_loader, criterion, optimizer, scheduler, num_epochs
                 running_loss = 0.0
 
         scheduler.step()
-
-        # Save checkpoint
-        save_checkpoint(model, optimizer, epoch)
-
 
 def save_checkpoint(model, optimizer, epoch, path="model_checkpoint.pth"):
     torch.save({

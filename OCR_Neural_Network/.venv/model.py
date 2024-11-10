@@ -16,7 +16,7 @@ class FieldOCRNetwork(nn.Module):
         self.dropout = nn.Dropout(0.25)
 
         # Bidirectional LSTM for sequence modeling
-        self.lstm = nn.LSTM(256, 256, bidirectional=True, batch_first=True)
+        self.lstm = nn.LSTM(512, 256, bidirectional=True, batch_first=True)
 
         # Output layer
         self.fc = nn.Linear(512, num_chars)
