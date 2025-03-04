@@ -9,3 +9,7 @@
 /backend/node_modules/
 /backend/src/.env
 /backend/package-lock.json
+/BoundingBoxDetector/data/
+/Gender_Detector_Neural_Network/data/
+/ID_Card_Generator/data/Generated_cards/
+/OCR_Neural_Network/data/

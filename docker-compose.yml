@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  node-backend:
+    build: ./backend/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - flask-backend
+
+  flask-backend:
+    build: ./Python_Flask_Backend/
+    ports:
+      - "5000:5000"
