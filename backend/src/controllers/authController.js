@@ -1,10 +1,9 @@
 const User = require('../models/userModel');
 const { hashPassword, comparePassword, isPasswordStrong } = require('../utils/passwordUtil');
-const { getCollection } = require('../config/db');
+const { connectDB, getCollection } = require('../config/db');
 const { generateToken } = require('../utils/tokenUtil');
 const { sendEmail } = require('../utils/emailUtils');
 const crypto = require('crypto');
-const connectDB = require('../config/db');
 
 exports.register = async (req, res) => {
     const { firstName, lastName, country, city, postalCode, street, number, email, password, confirmPassword } = req.body;
