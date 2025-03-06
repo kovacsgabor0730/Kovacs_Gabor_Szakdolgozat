@@ -4,9 +4,7 @@ import AppNavigator from './index';
 
 const App = () => {
     return (
-      <NavigationContainer>
         <AppNavigator />
-      </NavigationContainer>
     );
   };
   
