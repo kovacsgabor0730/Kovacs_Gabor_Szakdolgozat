@@ -11,7 +11,7 @@
 \select@language {magyar} \contentsline {section}{\numberline {2.2}Kihívások}{8}{section.2.2}%
 \select@language {magyar} \contentsline {subsection}{\numberline {2.2.1}Adatvédelem és biztonsági kockázatok}{8}{subsection.2.2.1}%
 \select@language {magyar} \contentsline {subsection}{\numberline {2.2.2}Hozzáférhetőség és technológiai akadályok}{8}{subsection.2.2.2}%
-\select@language {magyar} \contentsline {subsection}{\numberline {2.2.3}Jogszabályi és szabályozási kérdések}{8}{subsection.2.2.3}%
+\select@language {magyar} \contentsline {subsection}{\numberline {2.2.3}Jogszabályi és szabályozási kérdések}{9}{subsection.2.2.3}%
 \select@language {magyar} \contentsline {chapter}{\numberline {3}A mesterséges intelligencia szerepe az adatfeldolgozásban}{10}{chapter.3}%
 \select@language {magyar} \contentsline {section}{\numberline {3.1}Mi az az OCR (Optikai karakterfelismerés)?}{10}{section.3.1}%
 \select@language {magyar} \contentsline {section}{\numberline {3.2}Hogyan segíthet az MI a dokumentumok feldolgozásában?}{11}{section.3.2}%
@@ -30,4 +30,4 @@
 \select@language {magyar} \contentsline {section}{\numberline {6.1}A Node.js alapjai és működési modellje}{20}{section.6.1}%
 \select@language {magyar} \contentsline {section}{\numberline {6.2}A Node.js előnyei és kihívásai}{21}{section.6.2}%
 \select@language {magyar} \contentsline {section}{\numberline {6.3}Backend fejlesztés Express.js segítségével}{21}{section.6.3}%
-\select@language {magyar} \contentsline {section}{\numberline {6.4}Adatbázis-kezelés Node.js-ben}{22}{section.6.4}%
+\select@language {magyar} \contentsline {section}{\numberline {6.4}Adatbázis-kezelés Node.js-ben}{21}{section.6.4}%
