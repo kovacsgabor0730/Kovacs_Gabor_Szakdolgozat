@@ -15,7 +15,7 @@ IMG_HEIGHT = 378
 IMG_WIDTH = 600
 BOX_OUTPUT = 6 * 8
 BATCH_SIZE = 8
-EPOCHS = 3
+EPOCHS = 10
 
 def bounding_box_accuracy(y_true, y_pred):
 

@@ -6,6 +6,24 @@ from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from mltu.inferenceModel import OnnxInferenceModel
+from mltu.utils.text_utils import ctc_decoder, get_cer
+from tqdm import tqdm
+from mltu.configs import BaseModelConfigs
+
+class ImageToWordModel(OnnxInferenceModel):
+    def __init__(self, model_path, char_list):
+        super().__init__(model_path)
+        self.char_list = char_list
+    
+    def predict(self, image):
+        image=cv2.resize(image, self.input_shape[:2][::-1])
+        image_pred=np.expand_dims(image, axis=0).astype(np.float32)
+
+        preds=self.model.run(None, {self.input_name: image_pred})[0]
+
+        text=ctc_decoder(preds, self.char_list)[0]
+
+        return text
 
 # Flask inicializálása
 app = Flask(__name__)
