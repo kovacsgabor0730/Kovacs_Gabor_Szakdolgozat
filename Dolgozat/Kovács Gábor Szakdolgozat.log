@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.2)  13 MAR 2025 12:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.16)  17 MAR 2025 20:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **"KovÃ¡cs GÃ¡bor Szakdolgozat.tex"
 (./KovÃ¡cs GÃ¡bor Szakdolgozat.tex
-LaTeX2e <2024-11-01> patch level 1
-L3 programming layer <2024-12-09>
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
 (c:/texlive/2024/texmf-dist/tex/latex/thesis-ekf/thesis-ekf.cls
 Document Class: thesis-ekf 2024/04/18 v4.5 Thesis class for Eszterhazy Karoly C
 atholic University (Eger, Hungary)
@@ -81,7 +81,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 \c@section@level=\count271
 )
 (c:/texlive/2024/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count272
 )
 (c:/texlive/2024/texmf-dist/tex/generic/stringenc/stringenc.sty
@@ -263,11 +263,11 @@ LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ))
 (c:/texlive/2024/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2025/01/01 v25.1 The multilingual framework for pdfLaTeX, LuaLaT
+Package: babel 2025/02/14 v25.4 The multilingual framework for pdfLaTeX, LuaLaT
 eX and XeLaTeX
 \babel@savecnt=\count286
 \U@D=\dimen156
-\l@unhyphenated=\language89
+\l@unhyphenated=\language90
 
 (c:/texlive/2024/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
@@ -411,7 +411,7 @@ Package: amsthm 2020/05/29 v2.20.6
 \dth@everypar=\toks29
 )
 (c:/texlive/2024/texmf-dist/tex/latex/pdfpages/pdfpages.sty
-Package: pdfpages 2024/10/28 v0.6c Insert pages of external PDF documents (AM)
+Package: pdfpages 2025/01/30 v0.6e Insert pages of external PDF documents (AM)
 
 (c:/texlive/2024/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
@@ -445,7 +445,7 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 \AM@fboxrule=\dimen180
 
 (c:/texlive/2024/texmf-dist/tex/latex/pdfpages/pppdftex.def
-File: pppdftex.def 2024/10/28 v0.6c Pdfpages driver for pdfTeX (AM)
+File: pppdftex.def 2025/01/30 v0.6e Pdfpages driver for pdfTeX (AM)
 )
 \pdfpages@includegraphics@status=\count307
 \AM@pagebox=\box55
@@ -456,18 +456,29 @@ File: pppdftex.def 2024/10/28 v0.6c Pdfpages driver for pdfTeX (AM)
 \c@AM@survey=\count309
 \AM@templatesizebox=\box56
 )
+(c:/texlive/2024/texmf-dist/tex/latex/placeins/placeins.sty
+Package: placeins 2005/04/18  v 2.2
+)
+(c:/texlive/2024/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count310
+\float@exts=\toks33
+\float@box=\box57
+\@float@everytoks=\toks34
+\@floatcapt=\box58
+)
 (c:/texlive/2024/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count310
-\lst@gtempboxa=\box57
-\lst@token=\toks33
-\lst@length=\count311
+\lst@mode=\count311
+\lst@gtempboxa=\box59
+\lst@token=\toks35
+\lst@length=\count312
 \lst@currlwidth=\dimen181
-\lst@column=\count312
-\lst@pos=\count313
+\lst@column=\count313
+\lst@pos=\count314
 \lst@lostspace=\dimen182
 \lst@width=\dimen183
-\lst@newlines=\count314
-\lst@lineno=\count315
+\lst@newlines=\count315
+\lst@lineno=\count316
 \lst@maxwidth=\dimen184
 
 (c:/texlive/2024/texmf-dist/tex/latex/listings/lstpatch.sty
@@ -475,9 +486,9 @@ File: lstpatch.sty 2024/09/23 1.10c (Carsten Heinz)
 )
 (c:/texlive/2024/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
-\c@lstnumber=\count316
-\lst@skipnumbers=\count317
-\lst@framebox=\box58
+\c@lstnumber=\count317
+\lst@skipnumbers=\count318
+\lst@framebox=\box60
 )
 (c:/texlive/2024/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2024/09/23 1.10c listings configuration
@@ -500,9 +511,10 @@ Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 Package caption Info: Standard document class detected.
 Package caption Info: hungarian babel package is loaded.
 )
-\c@caption@flags=\count318
-\c@continuedfloat=\count319
+\c@caption@flags=\count319
+\c@continuedfloat=\count320
 Package caption Info: hungarian babel package is loaded.
+Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 )
@@ -513,35 +525,35 @@ tim
 (c:/texlive/2024/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
 ))
-\c@tetel=\count320
+\c@tetel=\count321
 
 (c:/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count321
-\l__pdf_internal_box=\box59
+\l__color_backend_stack_int=\count322
+\l__pdf_internal_box=\box61
 )
 (./KovÃ¡cs GÃ¡bor Szakdolgozat.aux)
 \openout1 = `"KovÃ¡cs GÃ¡bor Szakdolgozat.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-Package hyperref Info: Link coloring OFF on input line 44.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+Package hyperref Info: Link coloring OFF on input line 55.
  (./KovÃ¡cs GÃ¡bor Szakdolgozat.out)
 (./KovÃ¡cs GÃ¡bor Szakdolgozat.out)
 \@outlinefile=\write3
@@ -582,65 +594,65 @@ Package hyperref Info: Link coloring OFF on input line 44.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 4
-4.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 5
+5.
 (c:/texlive/2024/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 4
-4.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 5
+5.
 
 (c:/texlive/2024/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-44.
+55.
 
 (c:/texlive/2024/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-44.
+55.
 
 (c:/texlive/2024/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 44.
+(Font)              <12> on input line 55.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 44.
+(Font)              <8> on input line 55.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 44.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 44.
+(Font)              <6> on input line 55.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 55.
 
 
 (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 55.
 
 
 (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/lmex/m/n --> OMX/cmex/m/n on input line 44.
+(Font)                  OMX/lmex/m/n --> OMX/cmex/m/n on input line 55.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/lmex/m/n --> OMX/cmex/m/n on input line 44.
+(Font)                  OMX/lmex/m/n --> OMX/cmex/m/n on input line 55.
 
 (c:/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count322
+\scratchcounter=\count323
 \scratchdimen=\dimen193
-\scratchbox=\box60
-\nofMPsegments=\count323
-\nofMParguments=\count324
-\everyMPshowfont=\toks34
-\MPscratchCnt=\count325
+\scratchbox=\box62
+\nofMPsegments=\count324
+\nofMParguments=\count325
+\everyMPshowfont=\toks36
+\MPscratchCnt=\count326
 \MPscratchDim=\dimen194
-\MPnumerator=\count326
-\makeMPintoPDFobject=\count327
-\everyMPtoPDFconversion=\toks35
+\MPnumerator=\count327
+\makeMPintoPDFobject=\count328
+\everyMPtoPDFconversion=\toks37
 ) (c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -662,7 +674,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-\c@lstlisting=\count328
+\c@lstlisting=\count329
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
@@ -670,13 +682,13 @@ Package caption Info: End \AtBeginDocument code.
 LaTeX Info: Redefining \cal on input line 577.
 LaTeX Info: Redefining \mit on input line 578.
 )
-<eszterhazy-logo-hu.pdf, id=112, 256.07971pt x 88.04292pt>
+<eszterhazy-logo-hu.pdf, id=132, 256.07971pt x 88.04292pt>
 File: eszterhazy-logo-hu.pdf Graphic file (type pdf)
 <use eszterhazy-logo-hu.pdf>
-Package pdftex.def Info: eszterhazy-logo-hu.pdf  used on input line 52.
+Package pdftex.def Info: eszterhazy-logo-hu.pdf  used on input line 63.
 (pdftex.def)             Requested size: 256.07907pt x 88.0427pt.
 
-Overfull \hbox (3.99757pt too wide) in paragraph at lines 52--52
+Overfull \hbox (3.99757pt too wide) in paragraph at lines 63--63
  []| []  [] [] 
  []
 
@@ -687,161 +699,214 @@ Overfull \hbox (3.99757pt too wide) in paragraph at lines 52--52
 
 {c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/
 texmf-dist/fonts/enc/dvips/lm/lm-ec.enc} <c:/texlive/2024/texmf-dist/tex/latex/
-thesis-ekf/eszterhazy-logo-hu.pdf>] (./KovÃ¡cs GÃ¡bor Szakdolgozat.toc)
+thesis-ekf/eszterhazy-logo-hu.pdf>] (./KovÃ¡cs GÃ¡bor Szakdolgozat.toc
+
+[2
+
+])
 \tf@toc=\write4
 \openout4 = `"KovÃ¡cs GÃ¡bor Szakdolgozat.toc"'.
 
 
 
-[2
+[3]
 
-]
-
-[3
+[4
 
 ]
 1. fejezet.
 
 
-[4
+[5
 
 ]
-
-[5]
 
 [6]
 
 [7]
+
+[8]
 2. fejezet.
 
 
-[8
+[9
 
 ]
 
-[9]
+[10]
 3. fejezet.
-<Neural-Networks-Architecture.png, id=211, 803.0pt x 505.89pt>
+<Neural-Networks-Architecture.png, id=240, 803.0pt x 505.89pt>
 File: Neural-Networks-Architecture.png Graphic file (type png)
 <use Neural-Networks-Architecture.png>
 Package pdftex.def Info: Neural-Networks-Architecture.png  used on input line 1
-47.
+58.
 (pdftex.def)             Requested size: 284.52756pt x 179.25641pt.
 
 
-[10
+[11
 
  <./Neural-Networks-Architecture.png>]
 
-[11]
+[12]
 4. fejezet.
 
 
-[12
+[13
 
 ]
-
-[13]
 
 [14]
 
 [15]
 
 [16]
+
+[17]
 5. fejezet.
 
 
-[17
+[18
 
 ]
 
-[18]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-80.
- (c:/texlive/2024/texmf-dist/tex/latex/lm/t1lmtt.fd
+[19]
+6. fejezet.
+<eszemelyi-front.jpg, id=291, 602.25pt x 379.4175pt>
+File: eszemelyi-front.jpg Graphic file (type jpg)
+<use eszemelyi-front.jpg>
+Package pdftex.def Info: eszemelyi-front.jpg  used on input line 303.
+(pdftex.def)             Requested size: 227.62204pt x 143.40436pt.
+
+
+[20
+
+]
+<eszemelyi-front_photoshopped.jpg, id=300, 602.25pt x 379.4175pt>
+File: eszemelyi-front_photoshopped.jpg Graphic file (type jpg)
+<use eszemelyi-front_photoshopped.jpg>
+Package pdftex.def Info: eszemelyi-front_photoshopped.jpg  used on input line 3
+13.
+(pdftex.def)             Requested size: 227.62204pt x 143.40436pt.
+ (c:/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+)
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 318.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
+18.
+
+(c:/texlive/2024/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Underfull \hbox (badness 2680) in paragraph at lines 280--281
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
+327.
+
+(c:/texlive/2024/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+
+[21{c:/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/texlive/202
+4/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/texlive/2024/texmf-dist/fonts
+/enc/dvips/lm/lm-ts1.enc} <./eszemelyi-front.jpg> <./eszemelyi-front_photoshopp
+ed.jpg>]
+
+[22]
+<eszemelyi_with_OtÃ¡rtics_Andor.jpg, id=344, 618.31pt x 403.5075pt>
+File: eszemelyi_with_OtÃ¡rtics_Andor.jpg Graphic file (type jpg)
+<use eszemelyi_with_OtÃ¡rtics_Andor.jpg>
+Package pdftex.def Info: eszemelyi_with_OtÃ¡rtics_Andor.jpg  used on input line
+ 399.
+(pdftex.def)             Requested size: 227.62204pt x 148.54428pt.
+
+
+[23]
+Overfull \hbox (19.95332pt too wide) in paragraph at lines 417--418
+[][][] 
+ []
+
+
+
+[24 <./eszemelyi_with_OtÃ¡rtics_Andor.jpg>]
+
+[25]
+
+[26]
+Underfull \hbox (badness 2680) in paragraph at lines 463--464
 []\T1/lmr/m/n/12 Rosta Er-zsé-bet, \T1/lmr/m/it/12 A dak-ti-losz-kó-pia tör-té-
 ne-te\T1/lmr/m/n/12 , 2009 []$\T1/lmtt/m/n/12 https : / / erzsebetrosta .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 280--281
+Underfull \hbox (badness 10000) in paragraph at lines 463--464
 \T1/lmtt/m/n/12 hu / borlec-[]rajzolatok-[]dermatoglyphia / borrajzolatok-[]tud
 omanya /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--282
+Underfull \hbox (badness 10000) in paragraph at lines 464--465
 []\T1/lmr/m/n/12 Múlt-kor, \T1/lmr/m/it/12 Te-to-vá-lás-tól az arc-fel-is-me-ré
 -sig: a sze-mély-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--282
+Underfull \hbox (badness 10000) in paragraph at lines 464--465
 \T1/lmr/m/it/12 azo-no-sí-tás tör-té-ne-te\T1/lmr/m/n/12 , 2024 []$\T1/lmtt/m/n
 /12 https : / / m . mult-[]kor . hu /
  []
 
 
-Overfull \hbox (12.50339pt too wide) in paragraph at lines 281--282
+Overfull \hbox (12.50339pt too wide) in paragraph at lines 464--465
 \T1/lmtt/m/n/12 tetovalastol-[]az-[]arcfelismeresig-[]a-[]szemelyazonositas-[]t
 ortenete-[]20241206$[] 
  []
 
 
-Underfull \hbox (badness 6859) in paragraph at lines 282--283
+Underfull \hbox (badness 6859) in paragraph at lines 465--466
 []\T1/lmr/m/n/12 Kiss Ti-bor, Sze-g® Ta-más \T1/lmr/m/it/12 A sze-mély-azo-no-s
 í-tás múlt-ja, je-le-ne és jö-v®-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 282--283
+Underfull \hbox (badness 10000) in paragraph at lines 465--466
 \T1/lmr/m/it/12 je\T1/lmr/m/n/12 , 2017 []$\T1/lmtt/m/n/12 https : / / www . ko
 zszov . org . hu / dokumentumok / UMK _ 2017 / 2 / 06 _ A _
  []
 
 
 
-[19
+[27
 
 ] (./KovÃ¡cs GÃ¡bor Szakdolgozat.aux)
  ***********
-LaTeX2e <2024-11-01> patch level 1
-L3 programming layer <2024-12-09>
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
  ***********
-
-
-Package rerunfilecheck Warning: File `"KovÃ¡cs GÃ¡bor Szakdolgozat".out' has ch
-anged.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `"KovÃ¡cs GÃ¡bor Szakdolgozat".out':
-
-(rerunfilecheck)             Before: DBF9E895573261AFF9C3591F5D1FF408;6935
-(rerunfilecheck)             After:  71391A56D187B07DBD3E9D3C969C0903;7167.
+Package rerunfilecheck Info: File `"KovÃ¡cs GÃ¡bor Szakdolgozat".out' has not c
+hanged.
+(rerunfilecheck)             Checksum: 6F97363BABD7B0ADC14DC40ADB5B923C;7947.
  ) 
 Here is how much of TeX's memory you used:
- 17712 strings out of 473254
- 286148 string characters out of 5722072
- 708835 words of memory out of 5000000
- 40597 multiletter control sequences out of 15000+600000
- 631191 words of font info for 94 fonts, out of 8000000 for 9000
+ 18538 strings out of 473201
+ 296706 string characters out of 5720299
+ 1108720 words of memory out of 5000000
+ 41334 multiletter control sequences out of 15000+600000
+ 632902 words of font info for 97 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,7n,93p,797b,526s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,7n,93p,797b,2069s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/2024
 /texmf-dist/fonts/type1/public/lm/lmcsc10.pfb><c:/texlive/2024/texmf-dist/fonts
-/type1/public/lm/lmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/lm
-r12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/texlive/
-2024/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/texlive/2024/texmf-dist/font
-s/type1/public/lm/lmri12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/
-lmtt12.pfb>
-Output written on "KovÃ¡cs GÃ¡bor Szakdolgozat.pdf" (19 pages, 299217 bytes).
+/type1/public/lm/lmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/l
+mr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/texliv
+e/2024/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/texlive/2024/texmf-dist/fo
+nts/type1/public/lm/lmr8.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/
+lmri12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/tex
+live/2024/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/texlive/2024/texmf-di
+st/fonts/type1/public/lm/lmtt12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/pub
+lic/lm/lmtti10.pfb>
+Output written on "KovÃ¡cs GÃ¡bor Szakdolgozat.pdf" (27 pages, 658436 bytes).
 PDF statistics:
- 334 PDF objects out of 1000 (max. 8388607)
- 289 compressed objects within 3 object streams
- 65 named destinations out of 1000 (max. 500000)
- 227 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 554 PDF objects out of 1000 (max. 8388607)
+ 486 compressed objects within 5 object streams
+ 177 named destinations out of 1000 (max. 500000)
+ 282 words of extra memory for PDF output out of 10000 (max. 10000000)
 

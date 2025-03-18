@@ -5,6 +5,8 @@
 \usepackage[magyar]{babel}
 \usepackage{mathtools,amssymb,amsthm,pdfpages}
 \usepackage{graphicx, url}
+\usepackage{placeins}
+\usepackage{float}
 \usepackage{listings,xcolor,caption,upquote}
 %\lstloadlanguages{JavaScript}
 \footnotestyle{rule=fourth}
@@ -16,7 +18,7 @@
 \newtheorem{megjegyzes}[tetel]{Megjegyzés}
 
 \lstset{
-	inputencoding=utf8,
+	inputencoding=utf8/latin2,
 	basicstyle=\footnotesize\ttfamily,
 	columns=fullflexible,
 	numbers=left,
@@ -26,7 +28,9 @@
 	xrightmargin=2cm,
 	frame=single,
 	literate={ó}{\'{o}}1
-	{á}{\'{a}}1,
+	{á}{\'{a}}1
+	{é}{\'{e}}1
+	{í}{\'{i}}1,
 }
 
 \lstdefinestyle{myjavascript}{
@@ -38,6 +42,13 @@
 	stringstyle=\color{red},
 }
 
+\lstdefinestyle{mypython}{
+	language=Python,
+	backgroundcolor=\color{cyan!10},
+	keywordstyle=\color{blue},
+	commentstyle=\itshape\color{teal},
+	identifierstyle=\color{black}
+}
 
 \renewcommand{\lstlistingname}{kód}
 
@@ -276,6 +287,180 @@ Bár a React Native egy JavaScript alapú keretrendszer, a natív komponensek ha
 
 A React Native mögött hatalmas fejlesztői közösség áll, amely folyamatosan bővíti és fejleszti a keretrendszert. Ennek eredményeként számos könyvtár és eszköz érhető el, amelyek segíthetnek a gyakori feladatok, mint például az adatkezelés, a navigáció vagy az animációk kezelésében. A közösség által nyújtott támogatás rendkívül hasznos a fejlesztők számára, mivel gyorsan válaszokat és megoldásokat találhatnak a problémákra.
 
+\chapter{A projekt}
+
+A projekt célja egy olyan mobilalkalmazás fejlesztése volt, amely lehetőséget biztosít a felhasználók számára személyazonosságuk igazolására. A rendszer működése során a felhasználó először regisztrál az alkalmazásban, majd ezt követően a személyazonosító okmányáról egy fényképet készít. Az így kapott kép feldolgozása egy neurális hálózat segítségével történik, amely azonosítja és kinyeri a releváns adatokat az okmányról. Az így kinyert információkat az alkalmazás egy biztonságos adatbázisban tárolja, biztosítva ezzel a felhasználó azonosításának megbízhatóságát és hatékonyságát.
+
+\section{Adathalmaz generáló program}
+
+A neurális háló hatékony betanításához megfelelő mennyiségű és változatosságú adathalmazra (dataset) volt szükség. Mivel nem létezett olyan nyilvánosan elérhető adatforrás, amely magyar személyazonosító igazolványok képeit tartalmazta volna, ezért a szükséges adatkészletet saját magamnak kellett előállítanom. Az adathalmaz generálása során az alábbi lépéseket követtem.
+
+Az első lépés egy megfelelő alapként szolgáló személyazonosító igazolvány képének beszerzése volt. Az interneten keresve találtam egy olyan példányt, amely megfelelő referenciát biztosított a további példányok előállításához. Az így kiválasztott minta \aref{fig-eszemelyi} ábrán látható:
+
+\FloatBarrier
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{eszemelyi-front}
+	\caption{Minta személyazonosító igazolvány, forrás: \cite{eszemelyiImage} }
+	\label{fig-eszemelyi}
+\end{figure}
+
+Mivel az eredeti képen valós személyes adatok szerepeltek, ezért azokat el kellett távolítanom. Ehhez az Adobe Photoshop szoftvert használtam, amellyel kitöröltem az összes szöveget és egyéb személyes információt, így egy üres, adatmentes igazolványt kaptam. A megtisztított igazolvány \aref{fig-eszemelyi-photoshopped} ábrán tekinthető meg:
+
+\FloatBarrier
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{eszemelyi-front_photoshopped}
+	\caption{Minta személyazonosító igazolvány retusálva, forrás: saját kép }
+	\label{fig-eszemelyi-photoshopped}
+\end{figure}
+
+\begin{lstlisting}[style=mypython,caption=Augmentáció és fájlmentés, label=kod-python1]
+	def generate_random_date(start_date, end_date):
+	random_days = random.randint(0, (end_date - start_date).days)
+	random_date = start_date + timedelta(days=random_days)
+	year = str(random_date.year)
+	month = str(random_date.month).zfill(2)
+	day = str(random_date.day).zfill(2)
+	return [day, month, year]
+	def generate_doc_no():
+	digits = ''.join(random.choices(string.digits, k=6))
+	letters = ''.join(random.choices(string.ascii_uppercase, k=2))
+	return digits + letters
+	def generate_can():
+	return ' '.join(random.choices(string.digits, k=6))
+\end{lstlisting}
+
+Miután a kártyán szereplő eredeti adatokat eltávolítottam, a következő lépés az adatmezők véletlenszerű kitöltése volt. Ehhez először egy előre összeállított névadathalmazt használtam, amelyből a nevek generálása történt. A személyazonosító igazolványon szereplő fényképekhez egy előre összegyűjtött, szelfikből álló képadatbázist vettem alapul. A további adatok, mint például a CAN azonosító, az okmányazonosító, az érvényességi idő, a születési dátum és a nemre vonatkozó információ teljesen véletlenszerűen generálásra került \aref{kod-python1} kódrészletben bemutatott metódusok segítségével.
+
+A képek módosításához a Python programozási nyelvhez elérhető Pillow csomagot alkalmaztam, amely lehetőséget biztosított arra, hogy a képen szöveget helyezzek el, valamint új képrétegeket illesszek az eredeti alapra. A megfelelő vizuális megjelenés érdekében a szöveg pontos pozícióját, tartalmát, betűtípusát és színét előzetesen meg kellett határozni. Ehhez a Vanilla Extract Font betűtípust választottam, mivel ez hasonlít leginkább a személyazonosító igazolványokon alkalmazott karakterkészlethez.
+
+A generált adatok és képek további feldolgozása során minden adatmezőhöz kiszámítottam a megfelelő koordinátákat, amelyek a szöveg elhelyezéséhez szükségesek. A hatékonyság növelése érdekében függvény segítségével meghatároztam az egyes adatmezők határoló téglalapjait. A generált igazolványok további augmentációkat is kaptak, amely során enyhe elforgatást, fényerő- és kontrasztmódosítást, valamint zaj hozzáadását alkalmaztam, hogy az adatkinyerő modell számára változatosabb adathalmaz álljon rendelkezésre.
+
+A képek elforgatásához függvényeket használtam, amelyek a kép középpontja körül elforgatták a határoló dobozokat. A zajgenerálás során minden pixel értékéhez egy véletlenszerű értéket adtam hozzá, amelynek mértéke -10 és 10 közé esett. A fényerő és kontraszt módosításához a Pillow ImageEnhance osztályát alkalmaztam. Az augmentált képeket végül JSON formátumú fájlokba mentettem, amelyek tartalmazták a határoló dobozok koordinátáit és a hozzájuk tartozó szöveges értékeket.
+
+A végső lépésként az előállított személyazonosító igazolványokat és a hozzájuk tartozó címkézett adathalmazt fájlba mentettem, amelyet \aref{kod-python2} kódrészlet mutat be.
+
+\begin{lstlisting}[style=mypython,caption=Augmentáció és fájlmentés, label=kod-python2]
+#Augmentacio es mentes
+augmented_image, augmented_boxes, angle = augment_image_and_boxes(id_card, bounding_boxes)
+#Ha a kep atlatszosagot tartalmaz, atalakitas RGB modba
+if augmented_image.mode == "RGBA":
+	augmented_image = augmented_image.convert("RGB")
+
+#JSON formatumu cimkezett adat letrehozasa
+label_data = {
+	"image": f'eszemelyi_with_{person[1]}_{person[0]}.jpg',
+	"labels": []
+}
+
+for idx, field in enumerate(["Name", "Doc No", "Birthday", "Expiry", "CAN", "Gender", "Image"]):
+box = augmented_boxes[idx]
+x1, y1, x2, y2 = box
+
+text_value = ""
+
+if field == "Name":  
+	text_value = name  
+elif field == "Doc No":  
+	text_value = doc_no  
+elif field == "Birthday":  
+	text_value = birthday_str  
+elif field == "Expiry":  
+	text_value = expiry_str  
+elif field == "CAN":  
+	text_value = can_str  
+elif field == "Gender":  
+	text_value = "F" if gender=="M" else "N"  
+
+label_entry = {  
+	"label": field,  
+	"text": text_value,  
+	"box": [[x1, y1], [x2, y2]]  
+}  
+
+label_data["labels"].append(label_entry)
+
+#Fajlmentes
+output_image_path = f'./data/Generated_cards/eszemelyi_with_{person[1]}{person[0]}.jpg'
+output_json_path = f'./data/Generated_cards/json_labels/{person[1]}{person[0]}.json'
+augmented_image.save(output_image_path)
+with open(output_json_path, 'w') as json_file:
+json.dump(label_data, json_file, indent=4)
+
+\end{lstlisting}
+
+Az így előállított és címkézett adathalmaz megbízható alapot nyújtott a neurális hálózat betanításához, lehetővé téve az igazolványokon szereplő adatok pontos felismerését. \Aref{fig-eszemelyi-generated} ábrán egy generált személyi igazolvány látható, amelyen a piros keretek a határoló téglalapokat jelölik. Fontos megjegyezni, hogy ezek kizárólag a szemléltetés céljából kerültek megjelenítésre, az éles alkalmazás során nem láthatók.
+
+\section{A projektben használt neurális hálók}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{eszemelyi_with_Otártics_Andor.jpg}
+	\caption{Egy generált személyazonosító igazolvány, forrás: saját kép }
+	\label{fig-eszemelyi-generated}
+\end{figure}
+
+\subsection{OCR modell}
+
+Az optikai karakterfelismerés (OCR) megvalósításához a ,,01 image to word'' projektet használtam fel, amely a Machine Learning Training Utilities (MLTU) könyvtárra épül. Az eredeti implementáció egy előre meghatározott adathalmazon működik, azonban a személyi igazolványokon található adatok pontosabb felismerése érdekében a saját adathalmazommal tanítottam be a modellt.
+
+\begin{lstlisting}[style=mypython,caption=Konfigurációs fájl, label=kod-python3]
+	import os
+	from datetime import datetime
+	from mltu.configs import BaseModelConfigs
+	
+	class ModelConfigs(BaseModelConfigs):
+	def __init__(self):
+	super().__init__()
+	self.model_path = os.path.join("Models/1_image_to_word", datetime.strftime(datetime.now(), "%Y%m%d%H%M"))
+	self.vocab = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	self.height = 32
+	self.width = 128
+	self.max_text_length = 23
+	self.batch_size = 1024
+	self.learning_rate = 1e-4
+	self.train_epochs = 100
+	self.train_workers = 20
+\end{lstlisting}
+
+A rendszer működéséhez több komponens összehangolt működésére volt szükség. Az egyik legjelentősebb \aref{kod-python3}. ábrán látható konfigurációs fájl, amely meghatározza a modell legfontosabb paramétereit, például a képek méretét, a megengedett karakterek halmazát, a maximális szöveghosszt és a tanulási sebességet. Ezeket az értékeket az igazolványokon szereplő adatok felismeréséhez optimalizáltam.
+
+A neurális hálózat  egy konvolúciós neurális hálózatot (CNN) és egy bidirekcionális hosszú távú memóriával rendelkező (BiLSTM) réteget egyesít. A CNN rétegek a képekből jellemzőket vonnak ki, míg az LSTM rétegek az időbeli összefüggéseket elemzik. Az utolsó réteg egy teljesen összekapcsolt (Dense) réteg, amely az előrejelzett karaktereket adja vissza. A tanítás során a Connectionist Temporal Classification (CTC) algoritmus felel a karakterek helyes sorrendjének rekonstruálásáért.
+
+A tanítás során a rendszer az általam előkészített adathalmazon tanult. A tanítási folyamat az adatok betöltését, előfeldolgozását és a neurális hálózat tanítását végzi. Az eredeti kódban egy nyilvános OCR adathalmaz szerepelt, azonban ezt lecseréltem saját igazolványos képeimre és azokhoz tartozó címkékre. Az adathalmaz előkészítése során minden egyes képhez hozzárendeltem a rajta található szöveges információt, amelyet címkeként használt a modell a tanulás során.
+
+A betanítás folyamán különböző adattranszformációs lépések biztosították, hogy a rendszer hatékonyan tudja feldolgozni a bemeneti adatokat. A képeket megfelelő méretre alakítottam, a karaktereket számmá konvertáltam, és gondoskodtam róla, hogy a címkék egységes formátumban szerepeljenek. A modell az Adam optimalizáló algoritmust és a CTC veszteségfüggvényt használta a hatékonyabb tanulás érdekében.
+
+A tanítás során különböző visszacsatolási mechanizmusok segítették az optimális modellparaméterek megtalálását. Az EarlyStopping mechanizmus például megakadályozta a túlilleszkedést azáltal, hogy időben leállította a tanulási folyamatot, ha az érvényesítési hiba egy bizonyos számú iteráció után nem csökkent tovább. A tanítási folyamat végén a modell a legjobb teljesítményt nyújtó állapotában került elmentésre.
+
+A tanítás után az elkészült modellt teszteltem éles adatokon. Ehhez \aref{kod-python4}. kódban látható függvényt használtam, amely képes egy bemeneti képből szöveges információt visszaadni. A képek betöltése és előfeldolgozása után a modell futtatásra kerül, majd a CTC algoritmus dekódolja a felismerési eredményt, és visszaadja a szöveget.
+
+\begin{lstlisting}[style=mypython,caption=Konfigurációs fájl, label=kod-python4]
+	from mltu.inferenceModel import OnnxInferenceModel
+	from mltu.utils.text_utils import ctc_decoder, get_cer
+	
+	class ImageToWordModel(OnnxInferenceModel):
+	def __init__(self, char_list: typing.Union[str, list], *args, **kwargs):
+	super().__init__(*args, **kwargs)
+	self.char_list = char_list
+	
+	def predict(self, image: np.ndarray):
+	image = cv2.resize(image, self.input_shapes[0][1:3][::-1])
+	
+	image_pred = np.expand_dims(image, axis=0).astype(np.float32)
+	
+	preds = self.model.run(self.output_names, {self.input_names[0]: image_pred})[0]
+	
+	text = ctc_decoder(preds, self.char_list)[0]
+	
+	return text
+\end{lstlisting}
+
+A kiértékelési fázisban az OCR rendszer teljesítményét a Character Error Rate (CER) segítségével mértem, amely azt mutatja meg, hogy a modell mennyire pontosan képes felismerni a szöveget. A tesztelés során kiderült, hogy a saját adathalmazzal tanított modell jelentősen pontosabb eredményeket produkált a személyi igazolványokon található adatok felismerésekor, mint az eredeti verzió.
+
+
+
 \begin{thebibliography}{9}
 	\bibitem{okoriAzonositas} Rosta Erzsébet, \textit{A daktiloszkópia története}, 2009 \url{https://erzsebetrosta.hu/borlec-rajzolatok-dermatoglyphia/borrajzolatok-tudomanya/a-daktiloszkopia-tortenete.html}
 	\bibitem{kozepkorAzonositas} Múlt-kor, \textit{Tetoválástól az arcfelismerésig: a személyazonosítás története}, 2024 \url{https://m.mult-kor.hu/tetovalastol-az-arcfelismeresig-a-szemelyazonositas-tortenete-20241206}
@@ -285,6 +470,7 @@ A React Native mögött hatalmas fejlesztői közösség áll, amely folyamatosa
 	\bibitem{backend} \textsc{Mat Zaleski:} \textit{What Is a Mobile App Backend and Does Your Mobile Application Need It?}, 2024, \url{https://www.nomtek.com/blog/mobile-app-backend}
 	\bibitem{neuralNetwork} A.D.Dongare, R.R.Kharde, Amit D.Kachare, \textit{Introduction to Artificial Neural Network}, 2012 \url{https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=04d0b6952a4f0c7203577afc9476c2fcab2cba06}
 	\bibitem{neuralNetworkImage} GeeksforGeeks, \textit{Artificial Neural Networks and its Applications}, 2024 \url{https://www.geeksforgeeks.org/artificial-neural-networks-and-its-applications/}
+	\bibitem{eszemelyiImage} eSzemélyi, \textit{AZ eSZEMÉLYI}, é. n. \url{https://eszemelyi.hu/az-eszemelyi/}
 \end{thebibliography}
 	
 \end{document}

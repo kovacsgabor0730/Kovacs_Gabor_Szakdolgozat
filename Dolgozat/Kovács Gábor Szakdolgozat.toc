@@ -1,28 +1,32 @@
-\select@language {magyar} \contentsline {chapter}{\numberline {1}Személyazonosítás fejlődése és digitalizációja}{4}{chapter.1}%
-\select@language {magyar} \contentsline {section}{\numberline {1.1}A személyi igazolványok története}{4}{section.1.1}%
-\select@language {magyar} \contentsline {section}{\numberline {1.2}A digitális azonosítás megjelenése}{4}{section.1.2}%
-\select@language {magyar} \contentsline {section}{\numberline {1.3}A mobiltechnológia és az azonosítás}{5}{section.1.3}%
-\select@language {magyar} \contentsline {section}{\numberline {1.4}A digitalizáció jövője a személyazonosításban}{5}{section.1.4}%
-\select@language {magyar} \contentsline {section}{\numberline {1.5}Előnyök}{5}{section.1.5}%
-\select@language {magyar} \contentsline {section}{\numberline {1.6}Kihívások}{6}{section.1.6}%
-\select@language {magyar} \contentsline {chapter}{\numberline {2}A mesterséges intelligencia szerepe az adatfeldolgozásban}{8}{chapter.2}%
-\select@language {magyar} \contentsline {section}{\numberline {2.1}Mi az az OCR (Optikai karakterfelismerés)?}{8}{section.2.1}%
-\select@language {magyar} \contentsline {section}{\numberline {2.2}Hogyan segíthet az MI a dokumentumok feldolgozásában?}{9}{section.2.2}%
-\select@language {magyar} \contentsline {section}{\numberline {2.3}A mesterséges intelligencia jövője az adatfeldolgozásban}{9}{section.2.3}%
-\select@language {magyar} \contentsline {chapter}{\numberline {3}Neurális hálók}{10}{chapter.3}%
-\select@language {magyar} \contentsline {section}{\numberline {3.1}TensorFlow – A Mélytanulási Keretrendszer}{11}{section.3.1}%
-\select@language {magyar} \contentsline {chapter}{\numberline {4}Backend-en használt technológiák}{12}{chapter.4}%
-\select@language {magyar} \contentsline {section}{\numberline {4.1}Node.js}{12}{section.4.1}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.1.1}A Node.js alapjai és működési modellje}{12}{subsection.4.1.1}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.1.2}A Node.js előnyei és kihívásai}{13}{subsection.4.1.2}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.1.3}Backend fejlesztés Express.js segítségével}{13}{subsection.4.1.3}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.1.4}Adatbázis-kezelés Node.js-ben}{13}{subsection.4.1.4}%
-\select@language {magyar} \contentsline {section}{\numberline {4.2}MongoDB}{14}{section.4.2}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.2.1}A MongoDB működési elve}{14}{subsection.4.2.1}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.2.2}A MongoDB Különleges Jellemzői}{15}{subsection.4.2.2}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.2.3}A MongoDB Előnyei és Hátrányai}{15}{subsection.4.2.3}%
-\select@language {magyar} \contentsline {subsection}{\numberline {4.2.4}A MongoDB Alkalmazásai}{16}{subsection.4.2.4}%
-\select@language {magyar} \contentsline {chapter}{\numberline {5}Frontend-en használt technológiák}{17}{chapter.5}%
-\select@language {magyar} \contentsline {section}{\numberline {5.1}React Native}{17}{section.5.1}%
-\select@language {magyar} \contentsline {subsection}{\numberline {5.1.1}A React Native Működési Elve}{17}{subsection.5.1.1}%
-\select@language {magyar} \contentsline {subsection}{\numberline {5.1.2}A React Native Jellemzői}{18}{subsection.5.1.2}%
+\select@language {magyar} \contentsline {chapter}{\numberline {1}Személyazonosítás fejlődése és digitalizációja}{5}{chapter.1}%
+\select@language {magyar} \contentsline {section}{\numberline {1.1}A személyi igazolványok története}{5}{section.1.1}%
+\select@language {magyar} \contentsline {section}{\numberline {1.2}A digitális azonosítás megjelenése}{5}{section.1.2}%
+\select@language {magyar} \contentsline {section}{\numberline {1.3}A mobiltechnológia és az azonosítás}{6}{section.1.3}%
+\select@language {magyar} \contentsline {section}{\numberline {1.4}A digitalizáció jövője a személyazonosításban}{6}{section.1.4}%
+\select@language {magyar} \contentsline {section}{\numberline {1.5}Előnyök}{6}{section.1.5}%
+\select@language {magyar} \contentsline {section}{\numberline {1.6}Kihívások}{7}{section.1.6}%
+\select@language {magyar} \contentsline {chapter}{\numberline {2}A mesterséges intelligencia szerepe az adatfeldolgozásban}{9}{chapter.2}%
+\select@language {magyar} \contentsline {section}{\numberline {2.1}Mi az az OCR (Optikai karakterfelismerés)?}{9}{section.2.1}%
+\select@language {magyar} \contentsline {section}{\numberline {2.2}Hogyan segíthet az MI a dokumentumok feldolgozásában?}{10}{section.2.2}%
+\select@language {magyar} \contentsline {section}{\numberline {2.3}A mesterséges intelligencia jövője az adatfeldolgozásban}{10}{section.2.3}%
+\select@language {magyar} \contentsline {chapter}{\numberline {3}Neurális hálók}{11}{chapter.3}%
+\select@language {magyar} \contentsline {section}{\numberline {3.1}TensorFlow – A Mélytanulási Keretrendszer}{12}{section.3.1}%
+\select@language {magyar} \contentsline {chapter}{\numberline {4}Backend-en használt technológiák}{13}{chapter.4}%
+\select@language {magyar} \contentsline {section}{\numberline {4.1}Node.js}{13}{section.4.1}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.1.1}A Node.js alapjai és működési modellje}{13}{subsection.4.1.1}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.1.2}A Node.js előnyei és kihívásai}{14}{subsection.4.1.2}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.1.3}Backend fejlesztés Express.js segítségével}{14}{subsection.4.1.3}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.1.4}Adatbázis-kezelés Node.js-ben}{14}{subsection.4.1.4}%
+\select@language {magyar} \contentsline {section}{\numberline {4.2}MongoDB}{15}{section.4.2}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.2.1}A MongoDB működési elve}{15}{subsection.4.2.1}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.2.2}A MongoDB Különleges Jellemzői}{16}{subsection.4.2.2}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.2.3}A MongoDB Előnyei és Hátrányai}{16}{subsection.4.2.3}%
+\select@language {magyar} \contentsline {subsection}{\numberline {4.2.4}A MongoDB Alkalmazásai}{17}{subsection.4.2.4}%
+\select@language {magyar} \contentsline {chapter}{\numberline {5}Frontend-en használt technológiák}{18}{chapter.5}%
+\select@language {magyar} \contentsline {section}{\numberline {5.1}React Native}{18}{section.5.1}%
+\select@language {magyar} \contentsline {subsection}{\numberline {5.1.1}A React Native Működési Elve}{18}{subsection.5.1.1}%
+\select@language {magyar} \contentsline {subsection}{\numberline {5.1.2}A React Native Jellemzői}{19}{subsection.5.1.2}%
+\select@language {magyar} \contentsline {chapter}{\numberline {6}A projekt}{20}{chapter.6}%
+\select@language {magyar} \contentsline {section}{\numberline {6.1}Adathalmaz generáló program}{20}{section.6.1}%
+\select@language {magyar} \contentsline {section}{\numberline {6.2}A projektben használt neurális hálók}{24}{section.6.2}%
+\select@language {magyar} \contentsline {subsection}{\numberline {6.2.1}OCR modell}{24}{subsection.6.2.1}%

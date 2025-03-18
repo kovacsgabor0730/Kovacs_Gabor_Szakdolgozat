@@ -180,7 +180,7 @@ os.makedirs('./data/Generated_cards/json_labels', exist_ok=True)
 
 # Start generating labeled cards
 for person in file:
-    if i == 12000:
+    if i == 1:
         break
     id_card = Image.open('./data/eszemelyi-front_photoshoped.png').resize((600, 378))
     draw = ImageDraw.Draw(id_card)
@@ -227,7 +227,7 @@ for person in file:
     # Perform augmentation
     augmented_image, augmented_boxes, angle = augment_image_and_boxes(id_card, bounding_boxes)
 
-    #augmented_image_with_boxes = draw_bounding_boxes(augmented_image, augmented_boxes, angle)
+    augmented_image_with_boxes = draw_bounding_boxes(augmented_image, augmented_boxes, angle)
 
     if augmented_image.mode == "RGBA":
         augmented_image = augmented_image.convert("RGB")
