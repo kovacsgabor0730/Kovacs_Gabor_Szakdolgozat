@@ -69,7 +69,7 @@ def rotate_box(box, angle, image_center):
 
 def augment_image_and_boxes(image, boxes, angle=None):
     if angle is None:
-        angle = random.uniform(-5, 5)
+        angle = random.uniform(-20, 20)
 
     augmented_image = image.rotate(angle, expand=True)
 
@@ -180,7 +180,7 @@ os.makedirs('./data/Generated_cards/json_labels', exist_ok=True)
 
 # Start generating labeled cards
 for person in file:
-    if i == 1:
+    if i == 5:
         break
     id_card = Image.open('./data/eszemelyi-front_photoshoped.png').resize((600, 378))
     draw = ImageDraw.Draw(id_card)

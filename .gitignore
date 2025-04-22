@@ -8,8 +8,11 @@
 /.idea/inspectionProfiles/dataSources.local.xml
 /backend/node_modules/
 /backend/src/.env
+/backend/coverage/
 /backend/package-lock.json
 /BoundingBoxDetector/data/
+/BoundingBoxDetector/__pycache__/
+/BoundingBoxDetector/venv/
 /Gender_Detector_Neural_Network/data/
 /ID_Card_Generator/data/Generated_cards/
 /OCR_Neural_Network/data/

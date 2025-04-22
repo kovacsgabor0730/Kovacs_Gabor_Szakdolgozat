@@ -3,3 +3,7 @@ numpy==1.26.4
 opencv-python
 pillow
 mltu==0.1.3
+pyyaml==6.0
+psutil==5.8.0
+flask-swagger-ui==3.36.0
+pytest==6.2.5

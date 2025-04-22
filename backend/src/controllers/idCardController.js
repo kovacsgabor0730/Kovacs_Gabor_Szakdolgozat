@@ -6,7 +6,6 @@ const IdCard = require('../models/idCardModel');
 exports.uploadIdCardData = async (req, res) => {
     const { id_number, first_name, last_name, sex, date_of_expiry, place_of_birth, mothers_maiden_name, can_number, date_of_birth } = req.body;
 
-    // Validációk
     const idNumberPattern = /^[0-9]{6}[A-Z]{2}$/;
     const canNumberPattern = /^[0-9]{6}$/;
     const today = new Date();
@@ -68,5 +67,29 @@ exports.uploadIdCardData = async (req, res) => {
         res.status(200).json({ message: 'ID card data stored successfully', data: newIdCard });
     } catch (error) {
         res.status(500).json({ message: 'Error uploading ID card data', error: error.message });
+    }
+};
+
+exports.getIdCardDetails = async (req, res) => {
+    try {
+        const userId = req.userId;
+        
+        if (!userId) {
+            return res.status(401).json({ message: 'Not authenticated' });
+        }
+        
+        const idCardCollection = await getCollection('ids');
+        const idCard = await idCardCollection.findOne({ user_id: new ObjectId(userId) });
+        
+        if (!idCard) {
+            return res.status(404).json({ message: 'Nincs még feltöltött személyi igazolvány adat' });
+        }
+        
+        // Opcionálisan képet is visszaadhatunk, ha tárolunk olyat
+        res.status(200).json(idCard);
+        
+    } catch (error) {
+        console.error('Error fetching id card details:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

@@ -1,0 +1,163 @@
+openapi: 3.0.3
+info:
+  title: OCR Flask API
+  description: |
+    OCR (Optical Character Recognition) szolgáltatás a személyi igazolványok feldolgozásához.
+    A szolgáltatás gépi tanuláson alapuló modellt használ a képeken található szövegek kinyeréséhez.
+  version: 1.0.0
+  contact:
+    name: Kovács Gábor
+    email: info@idcardapp.com
+
+servers:
+  - url: http://localhost:5000
+    description: Fejlesztői környezet
+  - url: https://ocr-api.idcardapp.com
+    description: Éles környezet
+
+tags:
+  - name: OCR
+    description: Optikai karakterfelismerés végpontok
+  - name: System
+    description: Rendszer állapot végpontok
+
+paths:
+  /process:
+    post:
+      tags:
+        - OCR
+      summary: Kép feldolgozása OCR-rel
+      description: Személyi igazolvány képének feldolgozása és a szöveg kinyerése
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Base64 kódolású képadat
+      responses:
+        '200':
+          description: Sikeres feldolgozás
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  extractedData:
+                    type: object
+                    properties:
+                      id_number:
+                        type: string
+                        example: '123456AB'
+                      first_name:
+                        type: string
+                        example: Gábor
+                      last_name:
+                        type: string
+                        example: Kovács
+                      sex:
+                        type: string
+                        example: férfi
+                      date_of_expiry:
+                        type: string
+                        example: '2030.01.01'
+                      place_of_birth:
+                        type: string
+                        example: Budapest
+                      mothers_maiden_name:
+                        type: string
+                        example: Nagy Mária
+                      can_number:
+                        type: string
+                        example: '123456'
+                      date_of_birth:
+                        type: string
+                        example: '1990.01.01'
+                  processingTime:
+                    type: number
+                    format: float
+                    example: 0.534
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Invalid image data / Missing image data
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Error processing image / Model inference error
+
+  /health:
+    get:
+      tags:
+        - System
+      summary: Rendszer állapot ellenőrzése
+      description: Ellenőrzi az OCR szolgáltatás és a modell állapotát
+      responses:
+        '200':
+          description: A szolgáltatás megfelelően működik
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  version:
+                    type: string
+                    example: 1.0.0
+                  modelLoaded:
+                    type: boolean
+                    example: true
+                  memoryUsage:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                        example: 1024.5
+                      used:
+                        type: number
+                        example: 512.3
+                      unit:
+                        type: string
+                        example: MB
+        '500':
+          description: Rendszer probléma
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Error
+                  error:
+                    type: string
+                    example: Model failed to load / Service unavailable

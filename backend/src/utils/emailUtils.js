@@ -1,23 +1,36 @@
 const nodemailer = require('nodemailer');
 
-exports.sendEmail = async ({ to, subject, text }) => {
+// Email küldés konfigurálása
+const sendEmail = async (options) => {
+  try {
+    // Gmail transporter létrehozása
     const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
+      service: 'Gmail',
+      auth: {
+        user: 'eirattarto@gmail.com',
+        pass: 'ebpw cnml cdrh eglr'
+      }
     });
 
+    // Email konfigurálása
     const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to,
-        subject,
-        text
+      from: '"IdCard App" <eirattarto@gmail.com>',
+      to: options.to,
+      subject: options.subject,
+      text: options.text,
+      html: options.html
     };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully to:', options.to);
+    return info;
+  } catch (error) {
+    console.error('Email sending error:', error);
+    throw error;
+  }
 };
+
+module.exports = { sendEmail };
 
 exports.isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

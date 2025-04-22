@@ -1,0 +1,851 @@
+openapi: 3.0.3
+info:
+  title: IdCard Application API
+  description: |
+    Ez a dokumentáció az IdCard alkalmazás API-ját írja le.
+    A rendszer személyi igazolvány adatokat kezel, felhasználói regisztrációt, bejelentkezést, és OCR képfeldolgozást biztosít.
+  version: 1.0.0
+  contact:
+    name: Kovács Gábor
+    email: info@idcardapp.com
+
+servers:
+  - url: http://localhost:5000/api
+    description: Fejlesztői környezet
+  - url: https://idcardapp.com/api
+    description: Éles környezet
+
+tags:
+  - name: Auth
+    description: Autentikáció és felhasználókezelés
+  - name: UserProfile
+    description: Felhasználói profil adatok kezelése
+  - name: IdCard
+    description: Személyi igazolvány adatok kezelése
+  - name: Image
+    description: Dokumentumok képfeldolgozása OCR technológiával
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Új felhasználó regisztrálása
+      description: Új felhasználói fiók létrehozása a személyes adatok megadásával
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+                - confirmPassword
+              properties:
+                firstName:
+                  type: string
+                  example: Kovács
+                lastName:
+                  type: string
+                  example: Gábor
+                country:
+                  type: string
+                  example: Magyarország
+                city:
+                  type: string
+                  example: Budapest
+                postalCode:
+                  type: string
+                  example: 1000
+                street:
+                  type: string
+                  example: Fő utca
+                number:
+                  type: string
+                  example: 10
+                email:
+                  type: string
+                  format: email
+                  example: kovacs.gabor@example.com
+                password:
+                  type: string
+                  format: password
+                  example: Password123!
+                confirmPassword:
+                  type: string
+                  format: password
+                  example: Password123!
+      responses:
+        '201':
+          description: Sikeres regisztráció
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email already exists / Passwords do not match / Password is not strong enough
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Felhasználó bejelentkezés
+      description: Bejelentkezés email cím és jelszó megadásával
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: kovacs.gabor@example.com
+                password:
+                  type: string
+                  format: password
+                  example: Password123!
+      responses:
+        '200':
+          description: Sikeres bejelentkezés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Hibás bejelentkezési adatok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid email or password
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /auth/biometric-login:
+    post:
+      tags:
+        - Auth
+      summary: Biometrikus bejelentkezés
+      description: Bejelentkezés biometrikus azonosítással (pl. ujjlenyomat, Face ID)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: kovacs.gabor@example.com
+      responses:
+        '200':
+          description: Sikeres biometrikus bejelentkezés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Biometrikus bejelentkezés sikeres
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Hibás adatok vagy ismeretlen felhasználó
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Felhasználó nem található
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /auth/forgot-password:
+    post:
+      tags:
+        - Auth
+      summary: Elfelejtett jelszó
+      description: Jelszó-visszaállítási email küldése a megadott címre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: kovacs.gabor@example.com
+      responses:
+        '200':
+          description: Jelszó-visszaállítási link elküldve
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Jelszó visszaállítási email elküldve. Kérjük, ellenőrizze postaládáját!
+        '400':
+          description: Hiányzó email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email cím megadása kötelező
+        '404':
+          description: Nem létező felhasználó
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Nincs felhasználó ezzel az email címmel
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /auth/reset-password-form/{token}:
+    get:
+      tags:
+        - Auth
+      summary: Jelszó-visszaállító űrlap megjelenítése
+      description: HTML űrlap megjelenítése a jelszó visszaállításához
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: Jelszóvisszaállítási token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HTML válasz a jelszó visszaállító űrlappal
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /auth/reset-password/{token}:
+    post:
+      tags:
+        - Auth
+      summary: Új jelszó beállítása
+      description: Jelszó visszaállítása a megadott tokennel
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: Jelszóvisszaállítási token
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+                - confirmPassword
+              properties:
+                password:
+                  type: string
+                  format: password
+                  example: NewPassword123!
+                confirmPassword:
+                  type: string
+                  format: password
+                  example: NewPassword123!
+      responses:
+        '200':
+          description: Jelszó sikeresen megváltoztatva
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: A jelszó sikeresen megváltozott. Most már bejelentkezhet az új jelszavával.
+        '400':
+          description: Hibás jelszavak vagy token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: A két jelszó nem egyezik / A jelszó-visszaállítási token érvénytelen vagy lejárt
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /user/profile:
+    get:
+      tags:
+        - UserProfile
+      summary: Felhasználói profil lekérése
+      description: A bejelentkezett felhasználó profiljának lekérése
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Felhasználói profil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Nincs bejelentkezve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '404':
+          description: Felhasználó nem található
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    
+    put:
+      tags:
+        - UserProfile
+      summary: Felhasználói profil módosítása
+      description: A bejelentkezett felhasználó profiljának módosítása
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                      example: Gábor
+                    last_name:
+                      type: string
+                      example: Kovács
+                email:
+                  type: string
+                  format: email
+                  example: uj.email@example.com
+                address:
+                  type: object
+                  properties:
+                    country:
+                      type: string
+                      example: Magyarország
+                    city:
+                      type: string
+                      example: Budapest
+                    postalCode:
+                      type: string
+                      example: 1010
+                    street:
+                      type: string
+                      example: Új utca
+                    number:
+                      type: string
+                      example: 5
+                password:
+                  type: string
+                  format: password
+                  example: NewPassword123!
+      responses:
+        '200':
+          description: Profil módosítva
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Profile updated successfully
+        '401':
+          description: Nincs bejelentkezve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '404':
+          description: Felhasználó nem található
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /user/push-token:
+    post:
+      tags:
+        - UserProfile
+      summary: Push értesítési token regisztrálása
+      description: Expo vagy Firebase push token mentése a felhasználóhoz
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pushToken
+              properties:
+                pushToken:
+                  type: string
+                  example: ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
+      responses:
+        '200':
+          description: Token sikeresen mentve
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Push token saved successfully
+        '400':
+          description: Hiányzó token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Push token is required
+        '401':
+          description: Nincs bejelentkezve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /idcard/upload:
+    post:
+      tags:
+        - IdCard
+      summary: Személyi igazolvány adatok feltöltése
+      description: Személyi igazolvány adatok manuális feltöltése
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id_number
+                - first_name
+                - last_name
+                - sex
+                - date_of_expiry
+                - place_of_birth
+                - mothers_maiden_name
+                - can_number
+                - date_of_birth
+              properties:
+                id_number:
+                  type: string
+                  pattern: '^[0-9]{6}[A-Z]{2}$'
+                  example: '123456AB'
+                first_name:
+                  type: string
+                  example: Gábor
+                last_name:
+                  type: string
+                  example: Kovács
+                sex:
+                  type: string
+                  enum: [férfi, nő]
+                  example: férfi
+                date_of_expiry:
+                  type: string
+                  format: date
+                  example: '2030-01-01'
+                place_of_birth:
+                  type: string
+                  example: Budapest
+                mothers_maiden_name:
+                  type: string
+                  example: Szabó Mária
+                can_number:
+                  type: string
+                  pattern: '^[0-9]{6}$'
+                  example: '123456'
+                date_of_birth:
+                  type: string
+                  format: date
+                  example: '1990-01-01'
+      responses:
+        '200':
+          description: Személyi igazolvány adatok sikeresen mentve
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ID card data stored successfully
+                  data:
+                    $ref: '#/components/schemas/IdCard'
+        '400':
+          description: Hibás vagy hiányos adatok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ID number must be in the format 000000XY / You already have an account! / Name on the ID card does not match the logged-in user
+        '401':
+          description: Nincs bejelentkezve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /idcard/details:
+    get:
+      tags:
+        - IdCard
+      summary: Személyi igazolvány adatok lekérése
+      description: A felhasználó személyi igazolvány adatainak lekérése
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Személyi igazolvány adatok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdCard'
+        '401':
+          description: Nincs bejelentkezve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '404':
+          description: Még nincs feltöltve személyi igazolvány
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Nincs még feltöltött személyi igazolvány adat
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /image/upload:
+    post:
+      tags:
+        - Image
+      summary: Kép(ek) feltöltése OCR feldolgozáshoz
+      description: Dokumentum kép feltöltése szöveg felismeréshez
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Képek sikeresen feldolgozva
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Images uploaded and processed successfully!
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        success:
+                          type: boolean
+                        extractedData:
+                          type: object
+                          properties:
+                            id_number:
+                              type: string
+                              example: '123456AB'
+                            first_name:
+                              type: string
+                              example: Gábor
+                            last_name:
+                              type: string
+                              example: Kovács
+                            # További OCR adatok
+        '400':
+          description: Hiányzó vagy hibás képadatok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: At least one image is required!
+        '401':
+          description: Nincs bejelentkezve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: Szerver hiba
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token autentikációhoz. A 'Bearer' előtaggal kell használni.
+  
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: Gábor
+            last_name:
+              type: string
+              example: Kovács
+        email:
+          type: string
+          format: email
+          example: kovacs.gabor@example.com
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+              example: Magyarország
+            city:
+              type: string
+              example: Budapest
+            postal_code:
+              type: string
+              example: 1000
+            street:
+              type: string
+              example: Fő utca
+            number:
+              type: string
+              example: 10
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    
+    IdCard:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        user_id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        id_number:
+          type: string
+          example: 123456AB
+        first_name:
+          type: string
+          example: Gábor
+        last_name:
+          type: string
+          example: Kovács
+        sex:
+          type: string
+          enum: [férfi, nő]
+          example: férfi
+        date_of_expiry:
+          type: string
+          format: date
+          example: '2030-01-01'
+        place_of_birth:
+          type: string
+          example: Budapest
+        mothers_maiden_name:
+          type: string
+          example: Szabó Mária
+        can_number:
+          type: string
+          example: '123456'
+        date_of_birth:
+          type: string
+          format: date
+          example: '1990-01-01'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    
+    ServerError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Server error / Szerver hiba
+        error:
+          type: string
+          example: Error details
+    
+    UnauthorizedError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Not authenticated / Unauthorized

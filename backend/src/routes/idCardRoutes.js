@@ -4,5 +4,6 @@ const idCardController = require('../controllers/idCardController');
 const protect = require('../middlewares/authMiddleware');
 
 router.post('/upload', protect, idCardController.uploadIdCardData);
+router.get('/details', protect, idCardController.getIdCardDetails);
 
 module.exports = router;

@@ -1,0 +1,51 @@
+paths:
+  /api/image/upload:
+    post:
+      summary: Kép feltöltése és feldolgozása
+      description: Feltölti a személyi igazolvány képét a szerverre, ahol az OCR feldolgozás megtörténik.
+      tags:
+        - Images
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: string
+                  format: binary
+                  description: A feltöltendő kép fájlja
+      responses:
+        '200':
+          description: Sikeres feltöltés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        extracted_data:
+                          type: object
+                          properties:
+                            id_number:
+                              type: string
+                            first_name:
+                              type: string
+                            last_name:
+                              type: string
+                            date_of_expiry:
+                              type: string
+                              format: date
+        '400':
+          description: Hiányzó fájl vagy nem támogatott formátum
+        '401':
+          description: Hiányzó vagy érvénytelen token
+        '500':
+          description: Szerverhiba
