@@ -27,8 +27,6 @@ def load_data(image_dir, json_dir):
         image_boxes = []
         for label in data['labels']:
             points = label['box']
-            if label['label']=='Gender':
-                continue
             for point in points:
                 x, y = point
                 image_boxes.extend([x / IMG_WIDTH, y / IMG_HEIGHT])
