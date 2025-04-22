@@ -700,19 +700,19 @@ A fejezet első részében a \emph{neurális hálózatok tesztelését} mutatom 
 
 \subsection{Pontosság és metrikák} A modellek teljesítményének kiértékeléséhez különböző \emph{metrikákat} használtam, valamint elemeztem a tanulási folyamat során rögzített értékeket.
 
-Az \emph{OCR modell} tanítása során a CER értéke folyamatosan csökkent, ahogy a \aref{fig-ocr-training} ábrán látható. A kezdeti 0,95-ös értékről a 25. epochra 0,62-re javult, ami jelentős előrelépés, bár még mindig magas hibaarányt jelez.
+Az \emph{OCR modell} tanítása során a CER értéke folyamatosan csökkent, ahogy \aref{fig-ocr-training} ábrán látható. A kezdeti 0,95-ös értékről a 25. epochra 0,62-re javult, ami jelentős előrelépés, bár még mindig magas hibaarányt jelez.
 
 \begin{figure} \centering \includegraphics[width=\textwidth]{ocr_training_history} \caption{OCR modell tanítási és validációs karakterhiba-arány (CER) értékei, forrás: saját kép} \label{fig-ocr-training} \end{figure}
 
 A \emph{tesztelés} során kiderült, hogy a modell jelentős problémákkal küzd az \emph{ékezetes karakterek} felismerése terén. Különösen az ,,á'', ,,é'', ,,ő'' és ,,ű'' betűk okoztak nehézséget, amelyeket gyakran ékezet nélküli megfelelőikként azonosított. Emellett a \emph{szóközök felismerése} is következetlen volt, ami különösen a nevek feldolgozásánál okozott problémákat, mivel ezeket gyakran egybeírta vagy indokolatlanul több részre tagolta.
 
-A \emph{határoló doboz detektáló modell} jóval meggyőzőbb eredményeket mutatott, amint az a \aref{fig-bbox-training} ábrán látható. A veszteségfüggvény értékei egyenletesen csökkentek, míg a pontosság már a korai epochokban is 90\% feletti értéket ért el, majd 98\% körül stabilizálódott.
+A \emph{határoló doboz detektáló modell} jóval meggyőzőbb eredményeket mutatott, amint \aref{fig-bbox-training} ábrán látható. A veszteségfüggvény értékei egyenletesen csökkentek, míg a pontosság már a korai epochokban is 90\% feletti értéket ért el, majd 98\% körül stabilizálódott.
 
 \begin{figure} \centering \includegraphics[width=\textwidth]{ideal_learning_curves} \caption{Határoló doboz modell tanítási folyamata -- pontosság és veszteség, forrás: saját kép} \label{fig-bbox-training} \end{figure}
 
 Ugyanakkor a tesztelés során kiderült, hogy a modell érzékeny a \emph{perspektívatorzításra}. Amikor a felhasználók \emph{ferdén fotózták} a személyi igazolványt (20 foknál nagyobb szögben), a határdobozok jelentősen \emph{elcsúsztak}, ami az OCR modell számára tovább nehezítette a pontos szövegfelismerést. Különösen a kártya alsó részén található mezők (lejárati dátum, CAN kód) esetében volt észlelhető ez a probléma.
 
-A \emph{nemfelismerő modell} teljesítménye a \aref{fig-gender-training} ábrán látható. A validációs pontosság csak lassan emelkedett, és a görbék mutatnak némi instabilitást. Az accuracy értéke a 40. epochra is csak 75\% körül stabilizálódott.
+A \emph{nemfelismerő modell} teljesítménye \aref{fig-gender-training} ábrán látható. A validációs pontosság csak lassan emelkedett, és a görbék mutatnak némi instabilitást. Az accuracy értéke a 40. epochra is csak 75\% körül stabilizálódott.
 
 \begin{figure} \centering \includegraphics[width=\textwidth]{gender_learning_curves} \caption{Nemfelismerő modell tanítási és validációs metrikái, forrás: saját kép} \label{fig-gender-training} \end{figure}
 

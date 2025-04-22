@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNPickerSelect from 'react-native-picker-select';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -118,54 +119,48 @@ const IdCardScreen = () => {
   const handleUpload = async () => {
     const token = await AsyncStorage.getItem('token');
     if (!token) {
-      Alert.alert('Hiba', 'Nincs bejelentkezve');
+      Alert.alert('Hiba', 'Nincs bejelentkezve!');
       return;
     }
-
+  
     if (!imageUri) {
-      Alert.alert('Hiba', 'Nincs kép feltöltve. Kérjük készítsen vagy válasszon egy képet.');
+      Alert.alert('Hiba', 'Nincs kiválasztott kép!');
       return;
     }
-
+  
     try {
-      // Először mentsük el a lejárati dátumot a helyi értesítésekhez
-      await AsyncStorage.setItem('idCardExpiryDate', dateOfExpiry.toISOString());
-      
-      console.log('Személyi igazolvány lejárati dátuma:', dateOfExpiry);
-      
-      const response = await axios.post(`${apiUrl}/api/id-card/upload`, {
-        id_number: idNumber,
-        first_name: firstName,
-        last_name: lastName,
-        sex,
-        date_of_expiry: formatDate(dateOfExpiry),
-        place_of_birth: placeOfBirth,
-        mothers_maiden_name: mothersMaidenName,
-        can_number: canNumber,
-        date_of_birth: formatDate(dateOfBirth),
-        image_uri: imageUri,
-      }, {
+      // Fájl név kinyerése az URI-ból
+      const fileName = imageUri.split('/').pop() || `idcard.jpg`;
+      const fileType = fileName.endsWith('.png') ? 'image/png' : 'image/jpeg';
+  
+      // FormData létrehozása
+      const formData = new FormData();
+      formData.append('images', {
+        uri: imageUri,
+        name: fileName,
+        type: fileType,
+      } as any);
+  
+      const response = await fetch(`${apiUrl}/api/image/upload`, {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
+        body: formData,
       });
-
-      if (response.status === 200) {
-        // A dátum biztos helyesen kerüljön átadásra
-        await scheduleIdCardExpiryNotification(new Date(dateOfExpiry));
-        
-        Alert.alert('Siker', 'Személyi igazolvány adatok sikeresen feltöltve');
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        // Sikeres feldolgozás
+        Alert.alert('Siker', 'A kép feldolgozása sikeres!');
+        // Itt feldolgozhatod a result.results[0] adatokat
       } else {
-        Alert.alert('Hiba', response.data.message || 'Ismeretlen hiba történt');
+        Alert.alert('Hiba', result.message || 'Ismeretlen hiba történt!');
       }
     } catch (error: any) {
-      // Hibalogolás részletekkel
-      console.error('Upload error details:', error);
-      if (error.response && error.response.data && error.response.data.message) {
-        Alert.alert('Hiba', error.response.data.message);
-      } else {
-        Alert.alert('Hiba', 'Valami hiba történt a feltöltés során');
-      }
+      Alert.alert('Hiba', error.message || 'Ismeretlen hiba történt!');
     }
   };
 
