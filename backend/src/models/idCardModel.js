@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb');
 class IdCard {
     constructor(userId, idNumber, firstName, lastName, sex, dateOfExpiry, placeOfBirth, mothersMaidenName, canNumber, dateOfBirth) {
         this._id = new ObjectId();
-        this.user_id = new ObjectId(userId); // Helyes példányosítás
+        this.user_id = new ObjectId(userId);
         this.id_number = idNumber;
         this.first_name = firstName;
         this.last_name = lastName;

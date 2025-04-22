@@ -22,6 +22,16 @@ import {
   loginWithBiometrics
 } from '../utils/biometricHelper';
 
+/**
+ * LoginScreen komponens.
+ * 
+ * Bejelentkezési felületet biztosít a felhasználóknak.
+ * Támogatja mind a hagyományos (e-mail + jelszó), mind a biometrikus bejelentkezést.
+ * 
+ * @param {object} props - Komponens tulajdonságok
+ * @param {object} props.navigation - Navigációs objektum a képernyők közötti váltáshoz
+ * @returns {React.FC} React funkcionális komponens
+ */
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +39,10 @@ const LoginScreen = ({ navigation }) => {
 
   const apiUrl = Constants.expoConfig.extra.apiUrl;
 
-  // Ellenőrizzük, hogy elérhető-e a biometrikus bejelentkezés
+  /**
+   * Ellenőrzi a biometrikus bejelentkezés elérhetőségét a komponens betöltésekor.
+   * Ha elérhető és engedélyezett, automatikusan elindítja a biometrikus hitelesítést.
+   */
   useEffect(() => {
     const checkBiometric = async () => {
       try {
@@ -51,7 +64,12 @@ const LoginScreen = ({ navigation }) => {
     checkBiometric();
   }, []);
 
-  // Hagyományos bejelentkezés e-mail és jelszó alapján
+  /**
+   * Hagyományos bejelentkezés végrehajtása e-mail és jelszó alapján.
+   * Sikeres bejelentkezés esetén elmenti a tokent és beállítja a globális authentikációs állapotot.
+   * 
+   * @returns {Promise<void>} Promise, amely a bejelentkezés befejezésekor teljesül
+   */
   const handleLogin = async () => {
     console.log('Login button pressed', apiUrl);
     try {
@@ -86,7 +104,12 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // Biometrikus bejelentkezés
+  /**
+   * Biometrikus bejelentkezés végrehajtása.
+   * Ujjlenyomattal vagy arcfelismeréssel azonosítja a felhasználót.
+   * 
+   * @returns {Promise<void>} Promise, amely a biometrikus bejelentkezés befejezésekor teljesül
+   */
   const handleBiometricLogin = async () => {
     try {
       // Biometrikus azonosítás

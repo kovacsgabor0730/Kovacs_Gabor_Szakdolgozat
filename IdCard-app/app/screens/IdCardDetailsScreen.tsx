@@ -17,21 +17,47 @@ import { useFocusEffect } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { scheduleIdCardExpiryNotification } from '../utils/notificationHelper';
 
+/**
+ * IdCardData interfész.
+ * 
+ * A személyi igazolvány adatainak szerkezetét definiálja.
+ */
 interface IdCardData {
+  /** Személyi igazolvány azonosító száma */
   id_number: string;
+  /** Tulajdonos keresztneve */
   first_name: string;
+  /** Tulajdonos vezetékneve */
   last_name: string;
+  /** Tulajdonos neme */
   sex: string;
+  /** Személyi igazolvány lejárati dátuma */
   date_of_expiry: string;
+  /** Tulajdonos születési helye */
   place_of_birth: string;
+  /** Tulajdonos anyjának leánykori neve */
   mothers_maiden_name: string;
+  /** Személyi igazolvány CAN száma */
   can_number: string;
+  /** Tulajdonos születési dátuma */
   date_of_birth: string;
-  image_url?: string;  // Opcionális, ha van kép URL
+  /** Opcionális kép URL a személyi igazolványról */
+  image_url?: string;
+  /** Opcionális időbélyeg arról, mikor készült a rekord */
   created_at?: string;
+  /** Opcionális időbélyeg arról, mikor módosították utoljára a rekordot */
   modified_at?: string;
 }
 
+/**
+ * IdCardDetailsScreen komponens.
+ * 
+ * Megjeleníti a felhasználó személyi igazolványának részletes adatait.
+ * Adatokat kér le az API-tól és megjeleníti a releváns információkat, beleértve a lejárati figyelmeztetéseket.
+ * Kezeli a személyi igazolvány lejárati értesítések ütemezését is.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 const IdCardDetailsScreen = () => {
   const navigation = useNavigation();
   const [idCardData, setIdCardData] = useState<IdCardData | null>(null);
@@ -40,19 +66,19 @@ const IdCardDetailsScreen = () => {
   const [notificationScheduled, setNotificationScheduled] = useState<string | null>(null);
   const apiUrl = Constants.expoConfig.extra.apiUrl;
 
-  // Navigációs jelzés figyelése amikor a képernyő fókuszba kerül
+  /**
+   * Ellenőrzi a navigációs jelzéseket és az értesítési ütemezéseket, amikor a képernyő fókuszba kerül.
+   * Betölti a személyi igazolvány adatait.
+   */
   useFocusEffect(
     useCallback(() => {
       const checkNavigation = async () => {
         const navigateTo = await AsyncStorage.getItem('navigateToScreen');
         if (navigateTo === 'IdCardDetails') {
-          // Töröljük a jelzést
           await AsyncStorage.removeItem('navigateToScreen');
-          // Itt nem kell külön navigálni, mivel már ezen a képernyőn vagyunk
         }
       };
       
-      // Ütemezett értesítés ellenőrzése
       const checkNotificationSchedule = async () => {
         const scheduledDate = await AsyncStorage.getItem('idCardNotificationScheduled');
         setNotificationScheduled(scheduledDate);
@@ -60,29 +86,28 @@ const IdCardDetailsScreen = () => {
       
       checkNavigation();
       checkNotificationSchedule();
-      fetchIdCardData(); // Adatok frissítése amikor visszatérünk a képernyőre
+      fetchIdCardData();
     }, [])
   );
 
-  // Adatok lekérése és értesítés ütemezése
-  // Adatok lekérése és értesítés ütemezése
-useEffect(() => {
+  /**
+   * Figyeli az idCard adatok változását, és beütemezi az értesítéseket a lejárati dátum alapján.
+   * Ha változik a lejárati dátum, frissíti az értesítést.
+   */
+  useEffect(() => {
     if (idCardData && idCardData.date_of_expiry) {
       try {
         console.log('Lejárati dátum a szerverről:', idCardData.date_of_expiry);
         const expiryDate = new Date(idCardData.date_of_expiry);
         
-        // Dátum ellenőrzése a biztonság kedvéért
         if (isNaN(expiryDate.getTime())) {
           console.error('Érvénytelen lejárati dátum:', idCardData.date_of_expiry);
           return;
         }
         
-        // Ellenőrizzük, hogy van-e már ütemezett értesítés
         AsyncStorage.getItem('idCardNotificationScheduled').then(scheduledDate => {
           if (!scheduledDate) {
             console.log('Nincs még ütemezett értesítés, most ütemezünk.');
-            // Csak akkor ütemezünk értesítést, ha még nincs
             AsyncStorage.setItem('idCardExpiryDate', expiryDate.toISOString());
             
             scheduleIdCardExpiryNotification(expiryDate)
@@ -96,14 +121,10 @@ useEffect(() => {
             console.log('Már van ütemezett értesítés:', scheduledDate);
             setNotificationScheduled(scheduledDate);
             
-            // Opcionálisan: ellenőrizhetjük, hogy az ütemezett értesítés dátuma
-            // megfelel-e a jelenlegi lejárati dátumnak, és ha nem, akkor
-            // frissíthetjük az értesítést
             const scheduledDateTime = new Date(scheduledDate);
             const expectedNotifyDate = new Date(expiryDate);
             expectedNotifyDate.setMonth(expectedNotifyDate.getMonth() - 1);
             
-            // Ha 1 napnál nagyobb az eltérés, akkor frissítsük
             if (Math.abs(scheduledDateTime.getTime() - expectedNotifyDate.getTime()) > 24 * 60 * 60 * 1000) {
               console.log('Az ütemezett értesítés dátuma eltér az elvárttól, frissítjük.');
               AsyncStorage.setItem('idCardExpiryDate', expiryDate.toISOString());
@@ -124,7 +145,13 @@ useEffect(() => {
       }
     }
   }, [idCardData]);
-  // Személyi igazolvány adatok lekérése a backend API-ról
+
+  /**
+   * Lekéri a személyi igazolvány adatait a szerverről.
+   * Beállítja a betöltési és hibaállapotokat is.
+   * 
+   * @returns {Promise<void>} Promise, amely az adatlekérés befejezésekor teljesül
+   */
   const fetchIdCardData = async () => {
     setIsLoading(true);
     setError(null);
@@ -161,7 +188,12 @@ useEffect(() => {
     }
   };
 
-  // Dátum formázása olvashatóbb formátumra
+  /**
+   * Dátum sztring formázása olvashatóbb formátumra.
+   * 
+   * @param {string} dateString - A formázandó dátum sztring
+   * @returns {string} Formázott dátum sztring ÉÉÉÉ. HH. NN. formátumban
+   */
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
     
@@ -169,9 +201,13 @@ useEffect(() => {
     return `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')}.`;
   };
 
-  // Segédfüggvény, ami ellenőrzi, hogy egy hónapon belül lejár-e az igazolvány
-// Segédfüggvény módosítása, ami ellenőrzi, hogy egy hónapon belül lejár-e az igazolvány
-const isExpiringWithinMonth = (dateString: string): boolean => {
+  /**
+   * Ellenőrzi, hogy a személyi igazolvány egy hónapon belül lejár-e.
+   * 
+   * @param {string} dateString - Az ellenőrizendő lejárati dátum
+   * @returns {boolean} Igaz, ha a személyi igazolvány egy hónapon belül lejár, egyébként hamis
+   */
+  const isExpiringWithinMonth = (dateString: string): boolean => {
     if (!dateString) return false;
     
     try {
@@ -183,7 +219,6 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
       
       const now = new Date();
       
-      // Egy hónap múlva
       const oneMonthLater = new Date(now);
       oneMonthLater.setMonth(now.getMonth() + 1);
 
@@ -205,12 +240,13 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
     }
   };
 
-  // Adat feltöltési képernyőre navigálás
+  /**
+   * Navigál a személyi igazolvány feltöltési képernyőre.
+   */
   const navigateToUpload = () => {
     navigation.navigate('IdCard');
   };
 
-  // Betöltés közben
   if (isLoading) {
     return (
       <View style={styles.centerContainer}>
@@ -220,7 +256,6 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
     );
   }
 
-  // Hiba esetén
   if (error) {
     return (
       <View style={styles.centerContainer}>
@@ -238,7 +273,6 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
     );
   }
 
-  // Nincs adat
   if (!idCardData) {
     return (
       <View style={styles.centerContainer}>
@@ -251,13 +285,11 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
     );
   }
 
-  // Adatok megjelenítése
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>Személyi igazolvány adatok</Text>
         
-        {/* Kép megjelenítése ha van */}
         {idCardData.image_url ? (
           <Image 
             source={{ uri: idCardData.image_url }} 
@@ -271,7 +303,6 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
           </View>
         )}
 
-        {/* Adatkártyák */}
         <View style={styles.dataCard}>
           <Text style={styles.cardHeader}>Személyes adatok</Text>
           
@@ -344,7 +375,6 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
           )}
         </View>
 
-        {/* Értesítések szekció - teszt gomb nélkül */}
         <View style={styles.dataCard}>
           <Text style={styles.cardHeader}>Értesítések</Text>
           
@@ -365,7 +395,6 @@ const isExpiringWithinMonth = (dateString: string): boolean => {
           </Text>
         </View>
 
-        {/* Gomb az adatok frissítéséhez */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.refreshButton} onPress={fetchIdCardData}>
             <FontAwesome6 name="sync" size={16} color="#fff" style={styles.buttonIcon} />

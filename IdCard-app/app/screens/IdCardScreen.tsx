@@ -22,6 +22,15 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { scheduleIdCardExpiryNotification } from '../utils/notificationHelper';
 
+/**
+ * IdCardScreen komponens.
+ * 
+ * Felhasználói felületet biztosít a személyi igazolvány adatok kezeléséhez.
+ * Lehetővé teszi a felhasználónak, hogy képet készítsen vagy válasszon a személyi igazolványáról,
+ * majd az OCR technológiával felismert adatokat feltöltse a szerverre.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 const IdCardScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -42,6 +51,10 @@ const IdCardScreen = () => {
 
   const apiUrl = Constants.expoConfig.extra.apiUrl;
   
+  /**
+   * Figyeli, mikor kerül fókuszba a képernyő, és betölti a feldolgozott adatokat, ha vannak.
+   * Az OCR feldolgozás után ide kerülnek vissza az adatok.
+   */
   useFocusEffect(
     useCallback(() => {
       const loadProcessedData = async () => {
@@ -82,7 +95,12 @@ const IdCardScreen = () => {
     }, [])
   );
 
-  // Dátum formázó segédfüggvény
+  /**
+   * Dátum formázása YYYY-MM-DD formátumra.
+   * 
+   * @param {Date} date - A formázandó dátum objektum
+   * @returns {string} Dátum sztring YYYY-MM-DD formátumban
+   */
   const formatDate = (date) => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -90,97 +108,107 @@ const IdCardScreen = () => {
     return `${year}-${month}-${day}`;
   };
 
-// A handleUpload függvényben:
+  /**
+   * Kezeli a személyi igazolvány adatok feltöltését a szerverre.
+   * Ellenőrzi a bemeneti adatokat, eltárolja a lejárati dátumot értesítésekhez,
+   * majd beküldi az adatokat az API-nak.
+   * 
+   * @returns {Promise<void>} Promise, amely a feltöltés befejezésekor teljesül
+   */
+  const handleUpload = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      Alert.alert('Hiba', 'Nincs bejelentkezve');
+      return;
+    }
 
-const handleUpload = async () => {
-  const token = await AsyncStorage.getItem('token');
-  if (!token) {
-    Alert.alert('Hiba', 'Nincs bejelentkezve');
-    return;
-  }
+    if (!imageUri) {
+      Alert.alert('Hiba', 'Nincs kép feltöltve. Kérjük készítsen vagy válasszon egy képet.');
+      return;
+    }
 
-  if (!imageUri) {
-    Alert.alert('Hiba', 'Nincs kép feltöltve. Kérjük készítsen vagy válasszon egy képet.');
-    return;
-  }
-
-  try {
-    // Először mentsük el a lejárati dátumot a helyi értesítésekhez
-    await AsyncStorage.setItem('idCardExpiryDate', dateOfExpiry.toISOString());
-    
-    console.log('Személyi igazolvány lejárati dátuma:', dateOfExpiry);
-    
-    const response = await axios.post(`${apiUrl}/api/id-card/upload`, {
-      id_number: idNumber,
-      first_name: firstName,
-      last_name: lastName,
-      sex,
-      date_of_expiry: formatDate(dateOfExpiry),
-      place_of_birth: placeOfBirth,
-      mothers_maiden_name: mothersMaidenName,
-      can_number: canNumber,
-      date_of_birth: formatDate(dateOfBirth),
-      image_uri: imageUri,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.status === 200) {
-      // A dátum biztos helyesen kerüljön átadásra
-      await scheduleIdCardExpiryNotification(new Date(dateOfExpiry));
+    try {
+      // Először mentsük el a lejárati dátumot a helyi értesítésekhez
+      await AsyncStorage.setItem('idCardExpiryDate', dateOfExpiry.toISOString());
       
-      Alert.alert('Siker', 'Személyi igazolvány adatok sikeresen feltöltve');
-    } else {
-      Alert.alert('Hiba', response.data.message || 'Ismeretlen hiba történt');
-    }
-  } catch (error: any) {
-    // Hibalogolás részletekkel
-    console.error('Upload error details:', error);
-    if (error.response && error.response.data && error.response.data.message) {
-      Alert.alert('Hiba', error.response.data.message);
-    } else {
-      Alert.alert('Hiba', 'Valami hiba történt a feltöltés során');
-    }
-  }
-};
+      console.log('Személyi igazolvány lejárati dátuma:', dateOfExpiry);
+      
+      const response = await axios.post(`${apiUrl}/api/id-card/upload`, {
+        id_number: idNumber,
+        first_name: firstName,
+        last_name: lastName,
+        sex,
+        date_of_expiry: formatDate(dateOfExpiry),
+        place_of_birth: placeOfBirth,
+        mothers_maiden_name: mothersMaidenName,
+        can_number: canNumber,
+        date_of_birth: formatDate(dateOfBirth),
+        image_uri: imageUri,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  // Kamera megnyitása - React Navigation használata
+      if (response.status === 200) {
+        // A dátum biztos helyesen kerüljön átadásra
+        await scheduleIdCardExpiryNotification(new Date(dateOfExpiry));
+        
+        Alert.alert('Siker', 'Személyi igazolvány adatok sikeresen feltöltve');
+      } else {
+        Alert.alert('Hiba', response.data.message || 'Ismeretlen hiba történt');
+      }
+    } catch (error: any) {
+      // Hibalogolás részletekkel
+      console.error('Upload error details:', error);
+      if (error.response && error.response.data && error.response.data.message) {
+        Alert.alert('Hiba', error.response.data.message);
+      } else {
+        Alert.alert('Hiba', 'Valami hiba történt a feltöltés során');
+      }
+    }
+  };
+
+  /**
+   * Megnyitja a kamera képernyőt személyi igazolvány fotózásához.
+   * Navigál a Kamera képernyőre a megfelelő paraméterekkel.
+   */
   const openCamera = () => {
     navigation.navigate('Camera', { returnScreen: 'IdCard' });
   };
 
-  // Galériából választás
-  // Galériából választás
-// A pickImageFromGallery függvény módosítása:
-
-const pickImageFromGallery = async () => {
-  try {
-    console.log("Galéria megnyitása");
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true, // Körbevágás engedélyezése
-      aspect: [4, 3],      // Ugyanaz az arány, mint a kameránál
-      quality: 0.8,
-    });
-
-    console.log("Képválasztás eredménye:", result.canceled ? "törölve" : "kiválasztva");
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      console.log("Választott kép URI:", result.assets[0].uri);
-      
-      // Direktben használjuk a Camera képernyőt az OCR feldolgozáshoz
-      navigation.navigate('Camera', { 
-        imageUri: result.assets[0].uri,  // Előre adjuk át a már körbevágott képet
-        returnScreen: 'IdCard'
+  /**
+   * Megnyitja az eszköz galériáját kép kiválasztásához.
+   * A kiválasztott képet továbbítja a Camera képernyőre feldolgozásra.
+   * 
+   * @returns {Promise<void>} Promise, amely a képválasztás befejezésekor teljesül
+   */
+  const pickImageFromGallery = async () => {
+    try {
+      console.log("Galéria megnyitása");
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true, // Körbevágás engedélyezése
+        aspect: [4, 3],      // Ugyanaz az arány, mint a kameránál
+        quality: 0.8,
       });
+
+      console.log("Képválasztás eredménye:", result.canceled ? "törölve" : "kiválasztva");
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        console.log("Választott kép URI:", result.assets[0].uri);
+        
+        // Direktben használjuk a Camera képernyőt az OCR feldolgozáshoz
+        navigation.navigate('Camera', { 
+          imageUri: result.assets[0].uri,  // Előre adjuk át a már körbevágott képet
+          returnScreen: 'IdCard'
+        });
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      Alert.alert('Hiba', 'Nem sikerült a kép kiválasztása');
     }
-  } catch (error) {
-    console.error("Error picking image:", error);
-    Alert.alert('Hiba', 'Nem sikerült a kép kiválasztása');
-  }
-};
+  };
 
   // Év, hónap és nap választó lehetőségek generálása
   const generateYears = () => {
@@ -215,7 +243,17 @@ const pickImageFromGallery = async () => {
     return days;
   };
 
-  // Egyszerű dátumválasztó modál
+  /**
+   * Egyszerű dátumválasztó modális komponens.
+   * 
+   * @param {object} props - Komponens tulajdonságok
+   * @param {boolean} props.isVisible - Látható-e a modális ablak
+   * @param {Function} props.onClose - Bezárási eseménykezelő függvény
+   * @param {Date} props.date - Az aktuálisan kiválasztott dátum
+   * @param {Function} props.onDateChange - Dátumváltozás eseménykezelő
+   * @param {string} props.title - A modális ablak címe
+   * @returns {React.FC} React funkcionális komponens
+   */
   const SimpleDatePickerModal = ({ 
     isVisible, 
     onClose, 

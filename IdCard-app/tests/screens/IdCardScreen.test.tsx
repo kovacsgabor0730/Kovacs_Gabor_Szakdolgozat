@@ -6,6 +6,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import IdCardScreen from '../../app/screens/IdCardScreen';
 
+/**
+ * Test suite for the IdCardScreen component.
+ * Tests rendering and basic functionality of the ID card upload screen.
+ */
+
 // Mock a navigation objektum
 const mockNavigation = {
   navigate: jest.fn(),
@@ -34,6 +39,10 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('IdCardScreen', () => {
+  /**
+   * Setup before each test. 
+   * Clears mocks and configures AsyncStorage mock responses.
+   */
   beforeEach(() => {
     jest.clearAllMocks();
     
@@ -47,6 +56,9 @@ describe('IdCardScreen', () => {
       });
   });
 
+  /**
+   * Test that the component renders correctly with all expected elements.
+   */
   it('renders correctly', () => {
     const { getByText, getByPlaceholderText } = render(
       <IdCardScreen navigation={mockNavigation} />
@@ -59,6 +71,9 @@ describe('IdCardScreen', () => {
     expect(getByText('Feltöltés')).toBeTruthy();
   });
 
+  /**
+   * Test that the component loads last processed data correctly.
+   */
   it('loads last processed data', async () => {
     // Mock a korábban feldolgozott adatok
     const mockData = JSON.stringify({
@@ -88,6 +103,9 @@ describe('IdCardScreen', () => {
     });
   });
 
+  /**
+   * Test that the camera opens when the camera button is pressed.
+   */
   it('opens camera when camera button is pressed', async () => {
     const { getByText } = render(
       <IdCardScreen navigation={mockNavigation} />
@@ -102,6 +120,9 @@ describe('IdCardScreen', () => {
     });
   });
 
+  /**
+   * Test that the form submits with valid data.
+   */
   it('submits the form with valid data', async () => {
     // Mock sikeres válasz
     mockedAxios.post.mockResolvedValueOnce({
@@ -126,6 +147,9 @@ describe('IdCardScreen', () => {
     });
   });
 
+  /**
+   * Test that the image selection from the gallery is handled correctly.
+   */
   it('handles image selection from gallery', async () => {
     // Mock a kép kiválasztást
     (ImagePicker.launchImageLibraryAsync as jest.Mock).mockResolvedValueOnce({

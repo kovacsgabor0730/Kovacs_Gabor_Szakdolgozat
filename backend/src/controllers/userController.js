@@ -1,6 +1,14 @@
 const { connectDB, getCollection } = require('../config/db');
 const { ObjectId } = require('mongodb');
 
+/**
+ * Felhasználói profil adatok lekérése.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.getUserProfile = async (req, res) => {
     try {
         const userId = req.userId;
@@ -26,6 +34,15 @@ exports.getUserProfile = async (req, res) => {
     }
 };
 
+/**
+ * Felhasználói profil adatok módosítása.
+ * Lehetővé teszi a név, email, lakcím és jelszó módosítását.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.updateUserProfile = async (req, res) => {
     try {
         const userId = req.userId;
@@ -62,9 +79,15 @@ exports.updateUserProfile = async (req, res) => {
     }
 };
 
-// A meglévő controller-hez adnunk kell egy új metódust:
-
-// Push notification token mentése a felhasználóhoz
+/**
+ * Push értesítési token mentése a felhasználóhoz.
+ * Az Expo push notifikációkhoz szükséges token eltárolása.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.savePushToken = async (req, res) => {
     try {
       const userId = req.userId;

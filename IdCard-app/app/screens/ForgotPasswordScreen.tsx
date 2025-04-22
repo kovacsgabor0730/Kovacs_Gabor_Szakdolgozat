@@ -13,12 +13,27 @@ import Constants from 'expo-constants';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 
+/**
+ * Elfelejtett jelszó képernyő komponens.
+ * Lehetővé teszi a felhasználók számára, hogy jelszó-visszaállítási emailt kérjenek.
+ * 
+ * @param {object} navigation - A navigációs objektum, amely lehetővé teszi a képernyők közötti navigálást.
+ * @returns {React.ReactElement} A megjelenített komponens.
+ */
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   
   const apiUrl = Constants.expoConfig.extra.apiUrl;
 
+  /**
+   * Kezeli az elfelejtett jelszó kérést.
+   * Ellenőrzi az email cím kitöltöttségét, majd elküldi a jelszó-visszaállítási kérelmet a szervernek.
+   * Sikeres kérés esetén értesíti a felhasználót és visszairányítja a bejelentkezési képernyőre.
+   * 
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleForgotPassword = async () => {
     if (!email) {
       Alert.alert('Hiba', 'Kérjük, adja meg az email címét');
@@ -111,6 +126,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
   );
 };
 
+/**
+ * A komponens megjelenítéséhez használt stílusok.
+ */
 const styles = StyleSheet.create({
   container: {
     flex: 1,

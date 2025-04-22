@@ -21,6 +21,15 @@ import {
   disableBiometricLogin 
 } from '../utils/biometricHelper';
 
+/**
+ * EditProfileScreen komponens.
+ * 
+ * Felületet biztosít a felhasználói profil adatok szerkesztéséhez,
+ * beleértve a személyes adatokat és biometrikus bejelentkezés beállításait.
+ * Tartalmazza a kijelentkezési funkcionalitást is.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 const EditProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -30,7 +39,16 @@ const EditProfileScreen = () => {
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const apiUrl = Constants.expoConfig.extra.apiUrl;
 
+  /**
+   * Lekéri és betölti a felhasználó profil adatait az API-ról.
+   * Ellenőrzi a biometrikus hitelesítés elérhetőségét is.
+   */
   useEffect(() => {
+    /**
+     * Profil adatok lekérése a szerverről.
+     * 
+     * @returns {Promise<void>} Promise, amely a lekérés befejezésekor teljesül
+     */
     const fetchProfile = async () => {
       setLoading(true);
       try {
@@ -61,6 +79,11 @@ const EditProfileScreen = () => {
       }
     };
 
+    /**
+     * Biometrikus hitelesítés elérhetőségének ellenőrzése.
+     * 
+     * @returns {Promise<void>} Promise, amely az ellenőrzés befejezésekor teljesül
+     */
     const checkBiometric = async () => {
       const available = await isBiometricAvailable();
       const enabled = await isBiometricEnabled();
@@ -73,6 +96,12 @@ const EditProfileScreen = () => {
     checkBiometric();
   }, []);
 
+  /**
+   * Kezeli a felhasználói profil adatok frissítését.
+   * Ellenőrzi a bemeneti adatokat és elküldi a frissített adatokat az API-nak.
+   * 
+   * @returns {Promise<void>} Promise, amely a frissítés befejezésekor teljesül
+   */
   const handleUpdateProfile = async () => {
     if (!email || !firstName || !lastName) {
       Alert.alert('Hiba', 'Minden mezőt ki kell tölteni');
@@ -117,6 +146,12 @@ const EditProfileScreen = () => {
     }
   };
 
+  /**
+   * Kezeli a felhasználó kijelentkezését.
+   * Megerősítést kér a felhasználótól, majd eltávolítja a hitelesítési adatokat.
+   * 
+   * @returns {Promise<void>} Promise, amely a kijelentkezés befejezésekor teljesül
+   */
   const handleLogout = async () => {
     try {
       // Megkérdezzük a felhasználót, hogy biztosan ki akar-e jelentkezni
@@ -149,7 +184,12 @@ const EditProfileScreen = () => {
     }
   };
 
-  // Biometrikus bejelentkezés be/kikapcsolása
+  /**
+   * Ki- vagy bekapcsolja a biometrikus bejelentkezés funkcionalitást.
+   * Ha be van kapcsolva, kikapcsolja; ha ki van kapcsolva, bekapcsolja az elérhetőség ellenőrzése után.
+   * 
+   * @returns {Promise<void>} Promise, amely a váltás befejezésekor teljesül
+   */
   const toggleBiometric = async () => {
     try {
       if (biometricEnabled) {

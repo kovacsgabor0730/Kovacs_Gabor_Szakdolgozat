@@ -1,12 +1,20 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const dotenv = require('dotenv');
 
+/**
+ * Környezeti változók betöltése
+ */
 dotenv.config();
 
-// Az új példakód alapján frissített connection string
+/**
+ * MongoDB kapcsolódási URI létrehozása a környezeti változókból.
+ * Tartalmazza a felhasználónevet, jelszót, hosztot és az alkalmazás nevét.
+ */
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/?retryWrites=true&w=majority&appName=${process.env.DB_NAME}`;
 
-// MongoClient létrehozása a megfelelő beállításokkal
+/**
+ * MongoDB kliens létrehozása a megfelelő API verzió beállításokkal.
+ */
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -15,8 +23,19 @@ const client = new MongoClient(uri, {
     }
 });
 
+/**
+ * Az adatbázis példány
+ */
 let dbInstance = null;
 
+/**
+ * Csatlakozás a MongoDB adatbázishoz.
+ * Ha már létezik kapcsolat, azt adja vissza.
+ * 
+ * @async
+ * @returns {Promise<object>} Az adatbázis példány
+ * @throws {Error} Hiba esetén leállítja az alkalmazást
+ */
 const connectDB = async () => {
     if (dbInstance) return dbInstance;
     
@@ -37,11 +56,25 @@ const connectDB = async () => {
     }
 };
 
+/**
+ * Egy adott gyűjtemény (collection) lekérése az adatbázisból.
+ * 
+ * @async
+ * @param {string} collectionName - A lekérendő gyűjtemény neve
+ * @returns {Promise<object>} A kért gyűjtemény
+ */
 const getCollection = async (collectionName) => {
     const db = await connectDB();
     return db.collection(collectionName);
 };
 
+/**
+ * MongoDB kapcsolat bezárása.
+ * Felszabadítja a kapcsolatot és nullázza az adatbázis példányt.
+ * 
+ * @async
+ * @returns {Promise<void>}
+ */
 const closeConnection = async () => {
     if (client) {
         await client.close();

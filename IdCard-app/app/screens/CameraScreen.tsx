@@ -16,6 +16,14 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
+/**
+ * CameraScreen komponens.
+ * 
+ * Kezelőfelületet biztosít személyi igazolvány képének készítéséhez vagy kiválasztásához.
+ * A képet automatikusan feltölti az OCR feldolgozó API-hoz, majd visszanavigál az előző képernyőre az eredménnyel.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 const CameraScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
@@ -25,7 +33,10 @@ const CameraScreen = () => {
     const apiUrl = Constants.expoConfig.extra.apiUrl;
     const returnScreen = route.params?.returnScreen || 'IdCard';
 
-    // Komponens betöltésekor ellenőrizzük, hogy van-e már előre kiválasztott kép
+    /**
+     * Ellenőrzi, hogy van-e előre kiválasztott kép a komponens betöltésekor.
+     * Ha van, feldolgozza; ha nincs, elindítja a kamerát.
+     */
     useEffect(() => {
         if (route.params && route.params.imageUri) {
           console.log("Előre körbevágott kép érkezett:", route.params.imageUri);
@@ -38,6 +49,10 @@ const CameraScreen = () => {
         }
       }, [route.params]);
 
+    /**
+     * Figyeli a kép és a feldolgozási állapot változását, és automatikusan feltölti a képet,
+     * ha mindkettő készen áll.
+     */
     useEffect(() => {
         // Ha van kép és a feldolgozás is befejeződött
         if (croppedImage && processingComplete) {
@@ -45,7 +60,13 @@ const CameraScreen = () => {
         }
     }, [croppedImage, processingComplete]);
 
-    // Kép feltöltése az API-ra OCR feldolgozáshoz
+    /**
+     * Feltölti a képet az OCR API-hoz feldolgozás céljából.
+     * A feldolgozott adatokat elmenti az AsyncStorage-ba.
+     * 
+     * @param {string} imageUri - A feltöltendő kép URI-ja
+     * @returns {Promise<void>} Promise, amely a feltöltés befejezésekor teljesül
+     */
     const uploadToAPI = async (imageUri) => {
         try {
           console.log("Kép feltöltése OCR feldolgozásra:", imageUri);
@@ -112,6 +133,12 @@ const CameraScreen = () => {
         }
       };
 
+    /**
+     * Elindítja a kamerát kép készítéséhez.
+     * A készített képet automatikusan feldolgozza és elmenti a galériába, ha engedélyezett.
+     * 
+     * @returns {Promise<void>} Promise, amely a képkészítés befejezésekor teljesül
+     */
     const takePictureWithCamera = async () => {
         try {
             setIsSaving(true);
@@ -120,7 +147,7 @@ const CameraScreen = () => {
             const pickerResult = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
-                aspect: [4, 3],
+                aspect: [6, 4],
                 quality: 0.8,
             });
             

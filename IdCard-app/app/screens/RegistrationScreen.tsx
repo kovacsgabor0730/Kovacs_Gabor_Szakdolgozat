@@ -3,6 +3,14 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
+/**
+ * RegistrationScreen komponens.
+ * 
+ * Felhasználói regisztrációs felület, amely lehetővé teszi új felhasználók létrehozását.
+ * Személyes adatok és jelszó megadásával lehet regisztrálni.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 const RegistrationScreen = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -17,6 +25,12 @@ const RegistrationScreen = () => {
 
   const apiUrl = Constants.expoConfig.extra.apiUrl;
 
+  /**
+   * Felhasználói regisztráció végrehajtása.
+   * Ellenőrzi, hogy a jelszavak megegyeznek-e, majd beküldi az adatokat a szervernek.
+   * 
+   * @returns {Promise<void>} Promise, amely a regisztráció befejezésekor teljesül
+   */
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Passwords do not match');

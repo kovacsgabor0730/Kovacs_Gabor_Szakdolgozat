@@ -17,33 +17,58 @@ import { View, ActivityIndicator } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-const AuthStack = createNativeStackNavigator(); // Külön Stack a bejelentkezési folyamathoz
+const AuthStack = createNativeStackNavigator();
 
-// Globális változó a token változásának figyeléséhez
+/**
+ * Globális hitelesítési állapot objektum.
+ * Fenntartja a hitelesítési állapotot és megfigyelő mintát implementál
+ * a változásokról való értesítéshez.
+ */
 let globalAuthState = {
+  /** Jelenlegi hitelesítési állapot */
   isAuthenticated: false,
+  
+  /** Visszahívási függvények halmaza, amelyeket értesít a hitelesítési állapot változásakor */
   listeners: new Set<() => void>(),
   
-  // Metódus a listener hozzáadására
+  /**
+   * Figyelőt ad hozzá, amelyet meghív, amikor a hitelesítési állapot változik.
+   * 
+   * @param {Function} callback - Függvény, amelyet meghív a hitelesítési állapot változásakor
+   * @returns {Function} Függvény a figyelő eltávolításához
+   */
   addListener(callback: () => void) {
     this.listeners.add(callback);
     return () => this.listeners.delete(callback);
   },
   
-  // Metódus a státusz frissítésére
+  /**
+   * Frissíti a hitelesítési állapotot és értesíti az összes figyelőt.
+   * 
+   * @param {boolean} status - Új hitelesítési állapot
+   */
   updateStatus(status: boolean) {
     this.isAuthenticated = status;
     this.listeners.forEach(callback => callback());
   }
 };
 
-// Globális segédfüggvény a bejelentkezés átállításához
-// Ezt exportáljuk, hogy a LoginScreen használhassa
+/**
+ * Beállítja a globális hitelesítési állapotot.
+ * Ezt a függvényt exportáljuk, hogy a bejelentkezési/kijelentkezési kezelők használhassák.
+ * 
+ * @param {boolean} value - Új hitelesítési állapot (true = hitelesített)
+ */
 export function setAuthenticated(value: boolean) {
   globalAuthState.updateStatus(value);
 }
 
-// Beágyazott Auth struktúra, amely tartalmazza a tab navigációt és az egyedi képernyőket
+/**
+ * Hitelesítési navigátor komponens.
+ * Kezeli a hitelesítési képernyők és lapok közötti navigációt.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 function AuthNavigator() {
   return (
     <AuthStack.Navigator>
@@ -66,7 +91,12 @@ function AuthNavigator() {
   );
 }
 
-// Autentikációs képernyők (bejelentkezés, regisztráció)
+/**
+ * Hitelesítési lapok komponens.
+ * Lap navigációt biztosít a bejelentkezési és regisztrációs képernyők között.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 function AuthTabs() {
   return (
     <Tab.Navigator
@@ -98,7 +128,12 @@ function AuthTabs() {
   );
 }
 
-// Alkalmazás fő képernyők (bejelentkezés után)
+/**
+ * Alkalmazás lapok komponens.
+ * Lap navigációt biztosít a fő alkalmazás képernyők között a hitelesítés után.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 function AppTabs() {
   return (
     <Tab.Navigator
@@ -137,7 +172,13 @@ function AppTabs() {
   );
 }
 
-// FONTOS: Ez a fő komponens, amit exportálunk
+/**
+ * Az alkalmazás gyökér elrendezés komponense.
+ * Kezeli a hitelesítési állapotot és a navigációs szerkezetet.
+ * Kezeli a push értesítéseket és a hitelesítési állapot változásokat.
+ * 
+ * @returns {React.FC} React funkcionális komponens
+ */
 export default function RootLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -145,7 +186,11 @@ export default function RootLayout() {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
-  // Ellenőrizzük, hogy van-e token (bejelentkezett-e a felhasználó)
+  /**
+   * Inicializálja az alkalmazást.
+   * Ellenőrzi a hitelesítési állapotot, beállítja az értesítési figyelőket,
+   * és kezeli az útvonalválasztást a hitelesítés alapján.
+   */
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -167,35 +212,29 @@ export default function RootLayout() {
 
     checkAuthentication();
 
-    // Értesítés érkezés figyelése
+    // Értesítési figyelők beállítása
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       console.log('Notification received:', notification);
     });
 
-    // Értesítésre kattintás figyelése
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log('Notification response:', response);
-      
-      // Ha a személyi igazolvány lejáratáról szóló értesítésre kattintott, navigálás az IdCardDetails képernyőre
-      if (response.notification.request.content.data.type === 'id-card-expiry') {
-        AsyncStorage.setItem('navigateToScreen', 'IdCardDetails');
-      }
     });
 
-    // Figyeljük a globalAuthState változásait a custom listener mechanizmussal
-    const cleanupAuth = globalAuthState.addListener(() => {
+    // Figyelő regisztrálása a globális auth állapotra
+    const removeListener = globalAuthState.addListener(() => {
       setIsAuthenticated(globalAuthState.isAuthenticated);
     });
 
+    // Takarítás az unmount-nál
     return () => {
-      // Tisztítás
-      if (notificationListener.current) 
+      if (notificationListener.current) {
         Notifications.removeNotificationSubscription(notificationListener.current);
-      
-      if (responseListener.current)
+      }
+      if (responseListener.current) {
         Notifications.removeNotificationSubscription(responseListener.current);
-      
-      cleanupAuth();
+      }
+      removeListener();
     };
   }, []);
 
@@ -207,7 +246,6 @@ export default function RootLayout() {
     );
   }
 
-  // Itt visszatérünk közvetlenül a Stack.Navigator-ral a NavigationContainer nélkül
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isAuthenticated ? (

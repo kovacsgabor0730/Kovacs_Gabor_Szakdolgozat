@@ -6,6 +6,15 @@ const { sendEmail } = require('../utils/emailUtils');
 const { resetPasswordTemplate, invalidTokenTemplate } = require('../utils/htmlTemplates');
 const crypto = require('crypto');
 
+/**
+ * Felhasználói regisztráció.
+ * Ellenőrzi a jelszó erősségét, majd létrehozza az új felhasználói fiókot.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.register = async (req, res) => {
     const { firstName, lastName, country, city, postalCode, street, number, email, password, confirmPassword } = req.body;
 
@@ -37,7 +46,15 @@ exports.register = async (req, res) => {
     }
 };
 
-
+/**
+ * Felhasználói bejelentkezés.
+ * Ellenőrzi az email és jelszó kombinációt, majd sikeres belépés esetén JWT tokent generál.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -67,6 +84,15 @@ exports.login = async (req, res) => {
     }
 };
 
+/**
+ * Jelszó visszaállítási űrlap megjelenítése.
+ * Ellenőrzi, hogy a token érvényes-e, majd megjeleníti a megfelelő űrlapot.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.showResetPasswordForm = async (req, res) => {
     const { token } = req.params;
 
@@ -95,7 +121,15 @@ exports.showResetPasswordForm = async (req, res) => {
     }
 };
 
-// POST kérés kezelése a jelszó megváltoztatására
+/**
+ * Jelszó megváltoztatása token alapján.
+ * Ellenőrzi a token érvényességét és a új jelszavakat, majd frissíti a felhasználó jelszavát.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password, confirmPassword } = req.body;
@@ -153,7 +187,15 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
-// Forgotpassword módosítása, hogy webes linkeket küldjön
+/**
+ * Elfelejtett jelszó kezelése.
+ * Létrehoz egy visszaállítási tokent, elmenti a felhasználóhoz, és email-t küld a visszaállítási linkkel.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
@@ -238,6 +280,15 @@ IdCard App Csapat`,
     }
 };
 
+/**
+ * Biometrikus bejelentkezés.
+ * Lehetővé teszi a felhasználó bejelentkezését biometrikus azonosítással (pl. ujjlenyomat) az email alapján.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.biometricLogin = async (req, res) => {
     try {
       const { email } = req.body;

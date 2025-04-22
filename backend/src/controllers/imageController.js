@@ -2,7 +2,10 @@ const multer = require('multer');
 const { uploadImageToFlask } = require('../utils/flaskClient');
 const path = require('path');
 
-// Konfiguráljuk a tárolást
+/**
+ * Multer tárhely konfigurációja.
+ * Beállítja a feltöltött képek mentési helyét és a fájlok elnevezési szabályait.
+ */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, path.join(__dirname, './../../uploads/'));
@@ -12,10 +15,13 @@ const storage = multer.diskStorage({
     }
 });
 
-// Létrehozzuk a multer példányt, de még nem alkalmazzuk
+/**
+ * Multer feltöltési konfiguráció.
+ * Meghatározza a megengedett fájltípusokat és méretkorlátokat.
+ */
 const uploadMiddleware = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 * 5 },
+    limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
     fileFilter: (req, file, cb) => {
         if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
             cb(null, true);
@@ -25,7 +31,15 @@ const uploadMiddleware = multer({
     }
 });
 
-// Controller függvény
+/**
+ * Képek feltöltése és OCR feldolgozása.
+ * A feltöltött képeket elküldijük az OCR szolgáltatásnak, amely kinyeri a személyi igazolvány adatait.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 const uploadImages = async (req, res) => {
     console.log('Received request to upload images');
     

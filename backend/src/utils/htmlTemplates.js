@@ -1,5 +1,9 @@
 /**
- * Jelszóvisszaállítási űrlap HTML sablonja
+ * Jelszóvisszaállítási űrlap HTML sablonja.
+ * Megjelenít egy űrlapot, ahol a felhasználó megadhatja az új jelszavát.
+ * 
+ * @param {string} token - A jelszóvisszaállítási token, amit az URL-ből kap a rendszer
+ * @returns {string} A teljes HTML tartalom stringként
  */
 exports.resetPasswordTemplate = (token) => {
     return `
@@ -185,10 +189,13 @@ exports.resetPasswordTemplate = (token) => {
   `;
   };
   
-  /**
-   * Sikeres jelszó-visszaállítás utáni oldal sablonja
-   */
-  exports.resetSuccessTemplate = () => {
+/**
+ * Sikeres jelszó-visszaállítás utáni oldal sablonja.
+ * Megerősítő üzenetet jelenít meg a felhasználónak a sikeres jelszóváltoztatásról.
+ * 
+ * @returns {string} A teljes HTML tartalom stringként
+ */
+exports.resetSuccessTemplate = () => {
     return `
   <!DOCTYPE html>
   <html lang="hu">
@@ -266,10 +273,13 @@ exports.resetPasswordTemplate = (token) => {
   `;
   };
   
-  /**
-   * Hibás token vagy lejárt link oldal sablonja
-   */
-  exports.invalidTokenTemplate = () => {
+/**
+ * Hibás token vagy lejárt link oldal sablonja.
+ * Hibaüzenetet jelenít meg, ha a jelszó-visszaállítási token érvénytelen vagy lejárt.
+ * 
+ * @returns {string} A teljes HTML tartalom stringként
+ */
+exports.invalidTokenTemplate = () => {
     return `
   <!DOCTYPE html>
   <html lang="hu">

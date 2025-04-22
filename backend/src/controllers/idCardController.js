@@ -3,6 +3,16 @@ const { verifyToken } = require('../utils/tokenUtil');
 const { ObjectId } = require('mongodb');
 const IdCard = require('../models/idCardModel');
 
+/**
+ * Személyi igazolvány adatok feltöltése és validálása.
+ * Ellenőrzi, hogy az adatok megfelelnek-e a formai követelményeknek és 
+ * hogy a személyi igazolványon lévő név megegyezik-e a felhasználói fiókban tárolt névvel.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.uploadIdCardData = async (req, res) => {
     const { id_number, first_name, last_name, sex, date_of_expiry, place_of_birth, mothers_maiden_name, can_number, date_of_birth } = req.body;
 
@@ -70,6 +80,14 @@ exports.uploadIdCardData = async (req, res) => {
     }
 };
 
+/**
+ * Személyi igazolvány adatok lekérdezése a bejelentkezett felhasználóhoz.
+ * 
+ * @async
+ * @param {object} req - Express kérés objektum
+ * @param {object} res - Express válasz objektum
+ * @returns {Promise<void>}
+ */
 exports.getIdCardDetails = async (req, res) => {
     try {
         const userId = req.userId;
